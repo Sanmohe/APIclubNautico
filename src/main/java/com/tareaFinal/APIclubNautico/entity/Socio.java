@@ -18,6 +18,9 @@ public class Socio {
     private int id_socio;
 
     @Column
+    private String dni;
+
+    @Column
     private String nombre;
 
     @Column
