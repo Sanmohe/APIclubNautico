@@ -17,6 +17,7 @@ import org.hibernate.validator.constraints.Length;
 public class Socio {
     @Id                                                 //Indica la PK de la entidad
     @GeneratedValue(strategy = GenerationType.AUTO)     //Indica que se genera automáticamente
+    @Column
     private int id;
 
     @NotBlank(message = "Campo obligatorio")    //Indica que el campo no pueda dejarse en blanco o nulo
