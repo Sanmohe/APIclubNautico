@@ -1,6 +1,7 @@
 package com.tareaFinal.APIclubNautico.service;
 
 import com.tareaFinal.APIclubNautico.entity.Socio;
+import com.tareaFinal.APIclubNautico.error.SocioNotFoundException;
 import com.tareaFinal.APIclubNautico.repository.SocioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service                                    //Indica que es un Servicio de Spring. Spring la detectará y gestionará como un bean.
 public class SocioServiceIMP implements SocioService {
@@ -57,5 +59,39 @@ public class SocioServiceIMP implements SocioService {
     @Override
     public void deleteSocio(int id) {
         socioRepository.deleteById(id);                  //Llama al método del Repositorio para borrar el socio por el "id" introducido (DELETE)
+    }
+
+
+
+
+    //CONSULTAS ESPECÍFICAS
+
+    @Override
+    public Socio findSocioById(int id) throws SocioNotFoundException {
+        Optional<Socio> socio = socioRepository.findSocioById(id);
+        if (!socio.isPresent()) {     //Si el socio no está presente...
+            throw new SocioNotFoundException("El socio no está registrado");
+            //Instancia la excepción con su mensaje de respuesta
+        }
+        return socio.get();
+        //Si el socio existe, devuelve, el objeto Socio contenido en <Optional> mediante "get"
+    }
+
+    /*
+    @Override
+    public Optional<Socio> findSocioById(int id) {
+        return socioRepository.findSocioById(id);    //Llama al método del Repositorio para buscar el socio por el "id" (READ)
+    }
+    */
+
+
+    @Override
+    public Optional<Socio> findSocioByNombreWithJPQL(String nombre) {
+        return socioRepository.findSocioByNombreWithJPQL(nombre);       //Llama al método del Repositorio para buscar el socio por el "nombre" (READ)
+    }
+
+    @Override
+    public Optional<Socio> findSocioByNombreIgnoreCase(String nombre) {
+        return socioRepository.findSocioByNombreIgnoreCase(nombre);               //Llama al método del Repositorio para buscar el socio por el "nombre" (READ)
     }
 }
