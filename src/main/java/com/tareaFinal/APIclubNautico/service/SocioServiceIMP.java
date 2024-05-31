@@ -77,21 +77,25 @@ public class SocioServiceIMP implements SocioService {
         //Si el socio existe, devuelve, el objeto Socio contenido en <Optional> mediante "get"
     }
 
-    /*
     @Override
-    public Optional<Socio> findSocioById(int id) {
-        return socioRepository.findSocioById(id);    //Llama al método del Repositorio para buscar el socio por el "id" (READ)
-    }
-    */
-
-
-    @Override
-    public Optional<Socio> findSocioByDniWithJPQL(String dni) {
-        return socioRepository.findSocioByDniWithJPQL(dni);       //Llama al método del Repositorio para buscar el socio por el "dni" (READ)
+    public Socio findSocioByDniWithJPQL(String dni) throws SocioNotFoundException {
+        Optional<Socio> socio = socioRepository.findSocioByDniWithJPQL(dni);
+        if (!socio.isPresent()) {     //Si el socio no está presente...
+            throw new SocioNotFoundException("El socio no está registrado");
+            //Instancia la excepción con su mensaje de respuesta
+        }
+        return socio.get();
+        //Si el socio existe, devuelve, el objeto Socio contenido en <Optional> mediante "get"
     }
 
     @Override
-    public Optional<Socio> findSocioByDniIgnoreCase(String dni) {
-        return socioRepository.findSocioByDniIgnoreCase(dni);      //Llama al método del Repositorio para buscar el socio por el "dni" (READ)
+    public Socio findSocioByDniIgnoreCase(String dni) throws SocioNotFoundException {
+        Optional<Socio> socio = socioRepository.findSocioByDniIgnoreCase(dni);
+        if (!socio.isPresent()) {     //Si el socio no está presente...
+            throw new SocioNotFoundException("El socio no está registrado");
+            //Instancia la excepción con su mensaje de respuesta
+        }
+        return socio.get();
+        //Si el socio existe, devuelve, el objeto Socio contenido en <Optional> mediante "get"
     }
 }

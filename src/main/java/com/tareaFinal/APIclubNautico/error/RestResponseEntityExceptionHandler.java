@@ -20,7 +20,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(SocioNotFoundException.class) //El método manejará la excepción de "socio no encontrado"
     @ResponseStatus(HttpStatus.NOT_FOUND)           //El estado HTTP de la espuesta será del tipo "NOT FOUND"
-    public ResponseEntity<ErrorMessage> localNotFoundException(SocioNotFoundException exception) {
+    public ResponseEntity<ErrorMessage> socioNotFoundException(SocioNotFoundException exception) {
         ErrorMessage message = new ErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
         //Crea un objeto ErrorMessage con el estado HTTP.NOT_FOUND y el mensaje de la excepción
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
@@ -28,8 +28,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     /*
-    En la siguiente excepción no se usa @ExceceptionHandler porque
-    Spring por defecto ya maneja medianamente la excepción.
+    En la siguiente excepción no se usa @ExceceptionHandler porque Spring por defecto ya maneja medianamente la excepción.
     En este caso, se sobrecarga el método que usa ResponseEntityExceptionHandler para manejar la excepción
      */
     @Override

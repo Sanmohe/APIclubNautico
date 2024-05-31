@@ -14,14 +14,12 @@ public interface SocioService {
     //En lugar de devolver un "null" devuelve un "optional" que indica la posibilidad de ausencia de un valor
     //Si el valor optional existe, hay que usar GET para aceder.
 
-    Optional<Socio> findSocioByDniWithJPQL(String dni);   //Método que devolverá el socio filtrado por "dni"
-
-    Optional<Socio> findSocioByDniIgnoreCase(String dni);   //Método que devolverá el socio filtrado por "dni"
-
-    //Optional<Socio> findSocioById(int id);  //Método que devolverá los socios filtrados por "id"
-
-    Socio findSocioById(int id) throws SocioNotFoundException;    //Método que devolverá los socios filtrados por "id"
-                                                                  //Puede arrojar la excepción "socio no encontrado"
+    Socio findSocioById(int id) throws SocioNotFoundException;  //Método que devolverá los socios filtrados por "id"
+                                                                //Puede arrojar la excepción "socio no encontrado"
+    Socio findSocioByDniWithJPQL(String dni) throws SocioNotFoundException;;   //Método que devolverá el socio filtrado por "dni" (JPQL)
+                                                                                //Puede arrojar la excepción "socio no encontrado"
+    Socio findSocioByDniIgnoreCase(String dni) throws SocioNotFoundException;;   //Método que devolverá el socio filtrado por "dni"(Spring JPA)
+                                                                                //Puede arrojar la excepción "socio no encontrado"
 
     Socio saveSocio(Socio socio);   //Método que guardará el registro de un nuevo Socio (CREATE)
 

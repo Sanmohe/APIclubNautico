@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController                     //Indica que la clase es un Controlador de Spring.
-                                    // Manejará las solicitudes HTTP y devolverá respuestas JSON
+// Manejará las solicitudes HTTP y devolverá respuestas JSON
 public class SocioController {
 
     @Autowired                      //Inyeccción de dependencias.
@@ -22,55 +22,57 @@ public class SocioController {
 
     //ENDPOINTS
 
-    @GetMapping("/findAllSocios")               //Mapea las solicitudes GET a la URL indicada
+    @GetMapping("/findAllSocios")
+        //Mapea las solicitudes GET a la URL indicada
     List<Socio> findAllSocios() {
         return socioService.findAllSocios();    //Llama al método del Servicio para devolver la lista de todos los socios
     }
 
-    @GetMapping("/findSocioById/{id}")                              //Mapea las solicitudes GET a la URL indicada junto con el parametro "id"
+    @GetMapping("/findSocioById/{id}")
+        //Mapea las solicitudes GET a la URL indicada junto con el parametro "id"
     Socio findSocioById(@PathVariable int id) throws SocioNotFoundException {
         //Indica que va a capturar el parámetro "id" de la URL
         //Y que puede arrojar la excepción de "socio no encontrado"
-        return socioService.findSocioById(id);                      //Llama al método del Servicio para devolver la lista de socios filtrada por nombre
+        return socioService.findSocioById(id);  //Llama al método del Servicio para devolver la lista de socios filtrada por nombre
     }
 
-    /*
-    @GetMapping("/findSocioById/{id}")                              //Mapea las solicitudes GET a la URL indicada junto con el parametro "id"
-    Optional<Socio> findSocioById(@PathVariable int id) {    //Indica que va a capturar el parámetro "id" de la URL
-        return socioService.findSocioById(id);                      //Llama al método del Servicio para devolver la lista de socios filtrada por nombre
-    }
-    */
-
-
-    @GetMapping("/findSocioByDniWithJPQL/{dni}")                          //Mapea las solicitudes GET a la URL indicada junto con el parámetro "dni"
-    Optional<Socio> findSocioByNombreWithJPQL(@PathVariable String dni) {    //Indica que va a capturar el parámetro "dni" de la URL
-        return socioService.findSocioByDniWithJPQL(dni);                  //Llama al método del Servicio para devolver el socio filtrado por dni
+    @GetMapping("/findSocioByDniWithJPQL/{dni}")
+        //Mapea las solicitudes GET a la URL indicada junto con el parámetro "dni"
+    Socio findSocioByNombreWithJPQL(@PathVariable String dni) throws SocioNotFoundException {
+        //Indica que va a capturar el parámetro "dni" de la URL
+        //Y que puede arrojar la excepción de "socio no encontrado"
+        return socioService.findSocioByDniWithJPQL(dni);    //Llama al método del Servicio para devolver el socio filtrado por dni
     }
 
-    @GetMapping("/findSocioByDni/{dni}")                          //Mapea las solicitudes GET a la URL indicada junto con el parámetro "dni"
-    Optional<Socio> findSocioByDniIgnoreCase(@PathVariable String dni) {    //Indica que va a capturar el parámetro "dni" de la URL
+    @GetMapping("/findSocioByDni/{dni}")
+        //Mapea las solicitudes GET a la URL indicada junto con el parámetro "dni"
+    Socio findSocioByDniIgnoreCase(@PathVariable String dni) throws SocioNotFoundException {
+        //Indica que va a capturar el parámetro "dni" de la URL
+        //Y que puede arrojar la excepción de "socio no encontrado"
         return socioService.findSocioByDniIgnoreCase(dni);                  //Llama al método del Servicio para devolver la lista de socios filtrada por nombre
+
     }
 
-    @PostMapping("/createSocio")                        //Mapea las solicitudes POST a la url indicada
+    @PostMapping("/createSocio")
+        //Mapea las solicitudes POST a la url indicada
     Socio saveSocio(@Valid @RequestBody Socio socio) {  //Indica que va a recibir el cuerpo de la peticion HTTP y mapeará al objeto Socio
         //@Valid exige que se validen los datos
         return socioService.saveSocio(socio);           //Llama al método del Servicio para crear un nuevo socio
     }
 
-    @PutMapping("/updateSocio/{id}")                                        //Mapea las solicitudes PUT a la url indicada junto con el parámetro "id"
+    @PutMapping("/updateSocio/{id}")
+        //Mapea las solicitudes PUT a la url indicada junto con el parámetro "id"
     Socio updateSocio(@PathVariable int id, @RequestBody Socio socio) {     //Indica que va a capturar el parámetro "id" de la URL
-                                                                            //y que el cuerpo de la peticion HTTP y mapeará al objeto Socio con ese "id"
+        //y que el cuerpo de la peticion HTTP y mapeará al objeto Socio con ese "id"
         return socioService.updateSocio(id, socio);                         //Llama al método del Servicio para actualizar un socio existente (según "id")
     }
 
-    @DeleteMapping("/deleteSocio/{id}")                 //Mapea las solicitudes DELETE a la url indicada junto con el parámetro "id"
+    @DeleteMapping("/deleteSocio/{id}")
+    //Mapea las solicitudes DELETE a la url indicada junto con el parámetro "id"
     public String deleteSocio(@PathVariable int id) {   //Indica que va a capturar el parámetro "id" de la URL
         socioService.deleteSocio(id);                   //Llama al método del Servicio para borrar un socio existente (según "id"
         return "Socio eliminado correctamente";
     }
-
-
 
 
 }
