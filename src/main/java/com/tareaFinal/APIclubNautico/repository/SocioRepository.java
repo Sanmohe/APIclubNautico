@@ -12,12 +12,12 @@ public interface SocioRepository extends JpaRepository <Socio, Integer>{     //<
     //CONSULTAS ESPECÍFICAS
     
     //Consulta con JPQL
-    @Query("SELECT s FROM Socio s WHERE s.nombre = :nombre")    //:nombre es el parámetro que se le pasa al método
-    Optional<Socio> findSocioByNombreWithJPQL(String nombre);
+    @Query("SELECT s FROM Socio s WHERE s.dni = :dni")    //:nombre es el parámetro que se le pasa al método
+    Optional<Socio> findSocioByDniWithJPQL(String dni);
 
     //Consulta con Inversión de Control (Spring)
     Optional<Socio> findSocioById(int id);
-    Optional<Socio> findSocioByNombreIgnoreCase(String nombre);
+    Optional<Socio> findSocioByDniIgnoreCase(String dni);
 
 
 }

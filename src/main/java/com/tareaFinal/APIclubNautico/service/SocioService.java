@@ -14,9 +14,9 @@ public interface SocioService {
     //En lugar de devolver un "null" devuelve un "optional" que indica la posibilidad de ausencia de un valor
     //Si el valor optional existe, hay que usar GET para aceder.
 
-    Optional<Socio> findSocioByNombreWithJPQL(String nombre);   //Método que devolverá los socios filtrados por "nombre"
+    Optional<Socio> findSocioByDniWithJPQL(String dni);   //Método que devolverá el socio filtrado por "dni"
 
-    Optional<Socio> findSocioByNombreIgnoreCase(String nombre);   //Método que devolverá los socios filtrados por "nombre"
+    Optional<Socio> findSocioByDniIgnoreCase(String dni);   //Método que devolverá el socio filtrado por "dni"
 
     //Optional<Socio> findSocioById(int id);  //Método que devolverá los socios filtrados por "id"
 

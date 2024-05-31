@@ -1,0 +1,38 @@
+Creación de socios POSTMAN
+
+    {
+        "dni": "30330857H",
+        "nombre": "Sonia",
+        "apellido1": "López",
+        "apellido2": "Camacho",
+        "direccion": "C/Pino nº 3. 11500. El Puerto de Sta María",
+        "telefono": 630557336,
+        "email": "sonlopcam@gmail.com"
+    }
+    {
+        "dni": "30987655R",
+        "nombre": "Javier",
+        "apellido1": "Rodríguez",
+        "apellido2": "González",
+        "direccion": "C/Marea nº 1. 11500. El Puerto de Sta María",
+        "telefono": 687772054,
+        "email": "javrodgon@gmail.com"
+    }
+    {
+        "dni": "30454710B",
+        "nombre": "Sergio",
+        "apellido1": "Cárdenas",
+        "apellido2": "Muñoz",
+        "direccion": "C/Manolete nº 8. 11500. El Puerto de Sta María",
+        "telefono": 69084753,
+        "email": "sercarmun@gmail.com"
+    }
+    {
+        "dni": "32090128S",
+        "nombre": "Manuel",
+        "apellido1": "Gálvez",
+        "apellido2": "Pereiro",
+        "direccion": "C/Alpargata nº 22. 14010. Córdoba",
+        "telefono": 690546566,
+        "email": "mangalper@gmail.com"
+    }

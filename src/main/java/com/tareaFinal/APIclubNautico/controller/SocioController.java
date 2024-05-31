@@ -42,14 +42,14 @@ public class SocioController {
     */
 
 
-    @GetMapping("/findSocioByNombreWithJPQL/{nombre}")                          //Mapea las solicitudes GET a la URL indicada junto con el parámetro "nombre"
-    Optional<Socio> findSocioByNombreWithJPQL(@PathVariable String nombre) {    //Indica que va a capturar el parámetro "nombre" de la URL
-        return socioService.findSocioByNombreWithJPQL(nombre);                  //Llama al método del Servicio para devolver la lista de socios filtrada por nombre
+    @GetMapping("/findSocioByDniWithJPQL/{dni}")                          //Mapea las solicitudes GET a la URL indicada junto con el parámetro "dni"
+    Optional<Socio> findSocioByNombreWithJPQL(@PathVariable String dni) {    //Indica que va a capturar el parámetro "dni" de la URL
+        return socioService.findSocioByDniWithJPQL(dni);                  //Llama al método del Servicio para devolver el socio filtrado por dni
     }
 
-    @GetMapping("/findSocioByNombre/{nombre}")                          //Mapea las solicitudes GET a la URL indicada junto con el parámetro "nombre"
-    Optional<Socio> findSocioByNombreIgnoreCase(@PathVariable String nombre) {    //Indica que va a capturar el parámetro "nombre" de la URL
-        return socioService.findSocioByNombreIgnoreCase(nombre);                  //Llama al método del Servicio para devolver la lista de socios filtrada por nombre
+    @GetMapping("/findSocioByDni/{dni}")                          //Mapea las solicitudes GET a la URL indicada junto con el parámetro "dni"
+    Optional<Socio> findSocioByDniIgnoreCase(@PathVariable String dni) {    //Indica que va a capturar el parámetro "dni" de la URL
+        return socioService.findSocioByDniIgnoreCase(dni);                  //Llama al método del Servicio para devolver la lista de socios filtrada por nombre
     }
 
     @PostMapping("/createSocio")                        //Mapea las solicitudes POST a la url indicada

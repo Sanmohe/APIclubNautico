@@ -47,7 +47,7 @@ public class SocioServiceIMP implements SocioService {
         if (Objects.nonNull(socio.getDireccion()) && !"".equalsIgnoreCase(socio.getDireccion())) {  //Comprueba que no se está introduciendo una dirección nula
             socioExistente.setDireccion(socio.getDireccion());                                      //Sustituye la dirección del socio existente por la nueva
         }
-        if (Objects.nonNull(socio.getTelefono()) && !"".equalsIgnoreCase(String.valueOf(socio.getTelefono()))) {    //Comprueba que no se está introduciendo un teléfono nulo
+        if (Objects.nonNull(socio.getTelefono())) {    //Comprueba que no se está introduciendo un teléfono nulo
             socioExistente.setTelefono(socio.getTelefono());                                                        //Sustituye el teléfono del socio existente por el nuevo
         }
         if (Objects.nonNull(socio.getEmail()) && !"".equalsIgnoreCase(socio.getEmail())) {  //Comprueba que no se está introduciendo un email nulo
@@ -86,12 +86,12 @@ public class SocioServiceIMP implements SocioService {
 
 
     @Override
-    public Optional<Socio> findSocioByNombreWithJPQL(String nombre) {
-        return socioRepository.findSocioByNombreWithJPQL(nombre);       //Llama al método del Repositorio para buscar el socio por el "nombre" (READ)
+    public Optional<Socio> findSocioByDniWithJPQL(String dni) {
+        return socioRepository.findSocioByDniWithJPQL(dni);       //Llama al método del Repositorio para buscar el socio por el "dni" (READ)
     }
 
     @Override
-    public Optional<Socio> findSocioByNombreIgnoreCase(String nombre) {
-        return socioRepository.findSocioByNombreIgnoreCase(nombre);               //Llama al método del Repositorio para buscar el socio por el "nombre" (READ)
+    public Optional<Socio> findSocioByDniIgnoreCase(String dni) {
+        return socioRepository.findSocioByDniIgnoreCase(dni);      //Llama al método del Repositorio para buscar el socio por el "dni" (READ)
     }
 }
