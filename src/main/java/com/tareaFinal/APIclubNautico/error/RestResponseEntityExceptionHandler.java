@@ -18,14 +18,24 @@ import java.util.Map;
 @ControllerAdvice   //Indica que la clase captura y maneja las excepciones lanzadas en cualquier controlador de la app
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(SocioNotFoundException.class) //El método manejará la excepción de "socio no encontrado"
-    @ResponseStatus(HttpStatus.NOT_FOUND)           //El estado HTTP de la espuesta será del tipo "NOT FOUND"
-    public ResponseEntity<ErrorMessage> socioNotFoundException(SocioNotFoundException exception) {
+    @ExceptionHandler(NotFoundException.class) //El método manejará la excepción de "objeto no encontrado"
+    @ResponseStatus(HttpStatus.NOT_FOUND)           //El estado HTTP de la respuesta será del tipo "NOT FOUND"
+    public ResponseEntity<ErrorMessage> NotFoundException(NotFoundException exception) {
         ErrorMessage message = new ErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
         //Crea un objeto ErrorMessage con el estado HTTP.NOT_FOUND y el mensaje de la excepción
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
         //Devuelve un ResponseEntity con el estado HTTP NOT FOUND y el cuerpo del mensaje.
     }
+
+    @ExceptionHandler(AlreadyExistsException.class) //El método manejará la excepción de "socio no encontrado"
+    @ResponseStatus(HttpStatus.CONFLICT)           //El estado HTTP de la respuesta será del tipo "CONFLICT"
+    public ResponseEntity<ErrorMessage> AlreadyExistsException(AlreadyExistsException exception) {
+        ErrorMessage message = new ErrorMessage(HttpStatus.CONFLICT, exception.getMessage());
+        //Crea un objeto ErrorMessage con el estado HTTP.CONFLICT y el mensaje de la excepción
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
+        //Devuelve un ResponseEntity con el estado HTTP NOT FOUND y el cuerpo del mensaje.
+    }
+
 
     /*
     En la siguiente excepción no se usa @ExceceptionHandler porque Spring por defecto ya maneja medianamente la excepción.

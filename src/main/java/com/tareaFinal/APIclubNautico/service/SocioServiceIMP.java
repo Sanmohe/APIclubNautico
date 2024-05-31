@@ -1,7 +1,8 @@
 package com.tareaFinal.APIclubNautico.service;
 
 import com.tareaFinal.APIclubNautico.entity.Socio;
-import com.tareaFinal.APIclubNautico.error.SocioNotFoundException;
+import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
+import com.tareaFinal.APIclubNautico.error.NotFoundException;
 import com.tareaFinal.APIclubNautico.repository.SocioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,12 @@ public class SocioServiceIMP implements SocioService {
     }
 
     @Override
-    public Socio saveSocio(Socio socio) {
-        return socioRepository.save(socio); //Llama al método del Repositorio para guardar un socio (CREATE)
+    public Socio saveSocio(Socio socio) throws AlreadyExistsException {
+        Optional<Socio> socioExistente = socioRepository.findSocioByDniIgnoreCase(socio.getDni());
+        if (socioExistente.isPresent()) {
+            throw new AlreadyExistsException("El socio que intenta crear ya existe");
+        }
+        return socioRepository.save(socio);
     }
 
     @Override
@@ -62,15 +67,13 @@ public class SocioServiceIMP implements SocioService {
     }
 
 
-
-
     //CONSULTAS ESPECÍFICAS
 
     @Override
-    public Socio findSocioById(int id) throws SocioNotFoundException {
+    public Socio findSocioById(int id) throws NotFoundException {
         Optional<Socio> socio = socioRepository.findSocioById(id);
         if (!socio.isPresent()) {     //Si el socio no está presente...
-            throw new SocioNotFoundException("El socio no está registrado");
+            throw new NotFoundException("El socio no está registrado");
             //Instancia la excepción con su mensaje de respuesta
         }
         return socio.get();
@@ -78,10 +81,10 @@ public class SocioServiceIMP implements SocioService {
     }
 
     @Override
-    public Socio findSocioByDniWithJPQL(String dni) throws SocioNotFoundException {
+    public Socio findSocioByDniWithJPQL(String dni) throws NotFoundException {
         Optional<Socio> socio = socioRepository.findSocioByDniWithJPQL(dni);
         if (!socio.isPresent()) {     //Si el socio no está presente...
-            throw new SocioNotFoundException("El socio no está registrado");
+            throw new NotFoundException("El socio no está registrado");
             //Instancia la excepción con su mensaje de respuesta
         }
         return socio.get();
@@ -89,10 +92,10 @@ public class SocioServiceIMP implements SocioService {
     }
 
     @Override
-    public Socio findSocioByDniIgnoreCase(String dni) throws SocioNotFoundException {
+    public Socio findSocioByDniIgnoreCase(String dni) throws NotFoundException {
         Optional<Socio> socio = socioRepository.findSocioByDniIgnoreCase(dni);
         if (!socio.isPresent()) {     //Si el socio no está presente...
-            throw new SocioNotFoundException("El socio no está registrado");
+            throw new NotFoundException("El socio no está registrado");
             //Instancia la excepción con su mensaje de respuesta
         }
         return socio.get();
