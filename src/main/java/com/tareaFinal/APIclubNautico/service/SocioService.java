@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface SocioService {
 
-    List<Socio> findAllSocios();    //Método que devolverá una lista de elementos Socio (READ)
+    List<Socio> findAllSocios();
+    //Método que devolverá una lista de elementos Socio (READ)
 
     Socio findSocioById(int id) throws NotFoundException;
     //Método que devolverá los socios filtrados por "id"
@@ -30,7 +31,9 @@ public interface SocioService {
     //Método que actualizará el registro de un Socio existente (UPDATE)
     //Puede arrojar la excepción "no encontrado"
 
-    void deleteSocio (int id) throws NotFoundException;;     //Método que borrará el registro de un Socio (DELETE)
+    void deleteSocio (int id) throws NotFoundException;;
+    //Método que borrará el registro de un Socio (DELETE)
     //Puede arrojar la excepción "no encontrado"
+
 }
 

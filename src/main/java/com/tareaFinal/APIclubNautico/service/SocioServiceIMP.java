@@ -16,14 +16,16 @@ import java.util.Optional;
 //Indica que es un Servicio de Spring. Spring la detectará y gestionará como un bean.
 public class SocioServiceIMP implements SocioService {
 
-    @Autowired                              //Inyección de dependencias
+    @Autowired
+    //Inyección de dependencias
     SocioRepository socioRepository;
     ///Se inyecta automáticamente una instancia del Repositorio en la variable
     //Permite que el controlador use los métodos del Repositorio sin necesidad de instanciarlo manualmente.
 
     @Override
     public List<Socio> findAllSocios() {
-        return socioRepository.findAll();   //Llama al método del Repositorio para listar todos los Socios (READ)
+        return socioRepository.findAll();
+        //Llama al método del Repositorio para listar todos los Socios (READ)
     }
 
     @Override

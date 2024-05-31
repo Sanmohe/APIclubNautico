@@ -13,14 +13,15 @@ CREATE TABLE socio (
 
 CREATE TABLE patron (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-    dni VARCHAR(10),
-    nombre VARCHAR(50),
-    apellido1 VARCHAR(50),
+    dni VARCHAR(10) NOT NULL UNIQUE,
+    nombre VARCHAR(50) NOT NULL,
+    apellido1 VARCHAR(50) NOT NULL,
     apellido2 VARCHAR(50),
     direccion VARCHAR(50),
     telefono INT,
     email VARCHAR(50),
-    idSocio INT
+    idSocio INT, 
+    FOREIGN KEY (idSocio) REFERENCES socio(id)
 );
 
 CREATE TABLE barco (

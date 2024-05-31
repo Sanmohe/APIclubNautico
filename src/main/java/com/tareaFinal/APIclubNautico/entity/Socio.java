@@ -45,4 +45,11 @@ public class Socio {
 
     @Column
     private String email;
+
+    @OneToOne(mappedBy = "socio", cascade = {CascadeType.MERGE})
+    //Indica que la es relación 1:1
+    // "mappedBy" indica que la relaciñon está mapeada por "socio" en la entidad relacionada
+    // "CascadeType.MERGE" indica que solo las actualizaciones de socio se reflejarán en Patrón
+    // Se podría borrar un socio sin borrar el patrón
+    private Patron patron;
 }
