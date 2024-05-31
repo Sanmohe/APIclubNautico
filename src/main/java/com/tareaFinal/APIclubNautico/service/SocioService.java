@@ -10,22 +10,27 @@ public interface SocioService {
 
     List<Socio> findAllSocios();    //Método que devolverá una lista de elementos Socio (READ)
 
-    //Optional se usa para evitar el manejo directo de valores null. Encapsula valores.
-    //En lugar de devolver un "null" devuelve un "optional" que indica la posibilidad de ausencia de un valor
-    //Si el valor optional existe, hay que usar GET para aceder.
+    Socio findSocioById(int id) throws NotFoundException;
+    //Método que devolverá los socios filtrados por "id"
+    //Puede arrojar la excepción "no encontrado"
 
-    Socio findSocioById(int id) throws NotFoundException;  //Método que devolverá los socios filtrados por "id"
-                                                                //Puede arrojar la excepción "socio no encontrado"
-    Socio findSocioByDniWithJPQL(String dni) throws NotFoundException;;   //Método que devolverá el socio filtrado por "dni" (JPQL)
-                                                                                //Puede arrojar la excepción "socio no encontrado"
-    Socio findSocioByDniIgnoreCase(String dni) throws NotFoundException;;   //Método que devolverá el socio filtrado por "dni"(Spring JPA)
-                                                                                //Puede arrojar la excepción "socio no encontrado"
+    Socio findSocioByDniWithJPQL(String dni) throws NotFoundException;
+    //Método que devolverá el socio filtrado por "dni" (JPQL)
+    //Puede arrojar la excepción "no encontrado"
 
-    Socio saveSocio(Socio socio) throws AlreadyExistsException;   //Método que guardará el registro de un nuevo Socio (CREATE)
+    Socio findSocioByDniIgnoreCase(String dni) throws NotFoundException;
+    //Método que devolverá el socio filtrado por "dni"(Spring JPA)
+    //Puede arrojar la excepción "no encontrado"
 
-    Socio updateSocio (int id, Socio socio);    //Método que actualizará el registro de un Socio existente (UPDATE)
+    Socio saveSocio(Socio socio) throws AlreadyExistsException;
+    //Método que guardará el registro de un nuevo Socio (CREATE)
+    //Puede arrojar la excepción "ya existe"
 
-    void deleteSocio (int id);     //Método que borrará el registro de un Socio (DELETE)
+    Socio updateSocio (int id, Socio socio) throws NotFoundException;;
+    //Método que actualizará el registro de un Socio existente (UPDATE)
+    //Puede arrojar la excepción "no encontrado"
 
+    void deleteSocio (int id) throws NotFoundException;;     //Método que borrará el registro de un Socio (DELETE)
+    //Puede arrojar la excepción "no encontrado"
 }
 

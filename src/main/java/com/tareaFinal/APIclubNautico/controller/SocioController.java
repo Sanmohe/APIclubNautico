@@ -59,20 +59,25 @@ public class SocioController {
         //Indica que va a recibir el cuerpo de la peticion HTTP y mapeará al objeto Socio
         //Y que puede arrojar la excepción de "ya existe"
         //@Valid exige que se validen los datos
-        return socioService.saveSocio(socio);           //Llama al método del Servicio para crear un nuevo socio
+        return socioService.saveSocio(socio);   //Llama al método del Servicio para crear un nuevo socio
     }
 
     @PutMapping("/updateSocio/{id}")
         //Mapea las solicitudes PUT a la url indicada junto con el parámetro "id"
-    Socio updateSocio(@PathVariable int id, @RequestBody Socio socio) {     //Indica que va a capturar el parámetro "id" de la URL
-        //y que el cuerpo de la peticion HTTP y mapeará al objeto Socio con ese "id"
-        return socioService.updateSocio(id, socio);                         //Llama al método del Servicio para actualizar un socio existente (según "id")
+    Socio updateSocio(@PathVariable int id, @Valid @RequestBody Socio socio) throws NotFoundException {
+        //Indica que va a capturar el parámetro "id" de la URL y que el cuerpo de la peticion HTTP y mapeará al objeto Socio con ese "id"
+        //Y que puede arrojar la excepción de "no encontrado"
+        //@Valid exige que se validen los datos
+        return socioService.updateSocio(id, socio); //Llama al método del Servicio para actualizar un socio existente (según "id")
     }
 
     @DeleteMapping("/deleteSocio/{id}")
     //Mapea las solicitudes DELETE a la url indicada junto con el parámetro "id"
-    public String deleteSocio(@PathVariable int id) {   //Indica que va a capturar el parámetro "id" de la URL
-        socioService.deleteSocio(id);                   //Llama al método del Servicio para borrar un socio existente (según "id"
+    public String deleteSocio(@PathVariable int id) throws NotFoundException {
+        //Indica que va a capturar el parámetro "id" de la URL
+        //Y que puede arrojar la excepción de "no encontrado"
+        socioService.deleteSocio(id);
+        //Llama al método del Servicio para borrar un socio existente (según "id")
         return "Socio eliminado correctamente";
     }
 

@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Service                                    //Indica que es un Servicio de Spring. Spring la detectará y gestionará como un bean.
+@Service
+//Indica que es un Servicio de Spring. Spring la detectará y gestionará como un bean.
 public class SocioServiceIMP implements SocioService {
 
     @Autowired                              //Inyección de dependencias
@@ -28,14 +29,23 @@ public class SocioServiceIMP implements SocioService {
     @Override
     public Socio saveSocio(Socio socio) throws AlreadyExistsException {
         Optional<Socio> socioExistente = socioRepository.findSocioByDniIgnoreCase(socio.getDni());
+        //Optional se usa para evitar el manejo directo de valores null. Encapsula valores.
+        //En lugar de devolver un "null" devuelve un "optional" que indica la posibilidad de ausencia de un valor
+        //Si el valor optional existe, hay que usar GET para acceder.
         if (socioExistente.isPresent()) {
             throw new AlreadyExistsException("El socio que intenta crear ya existe");
         }
         return socioRepository.save(socio);
+        //Guarda el socio (CREATE)
     }
 
     @Override
-    public Socio updateSocio(int id, Socio socio) {
+    public Socio updateSocio(int id, Socio socio) throws NotFoundException {
+        Optional<Socio> socioExistenteOpcional = socioRepository.findSocioById(id);
+        if (!socioExistenteOpcional.isPresent()) {     //Si el socio no está presente...
+            throw new NotFoundException("El socio no está registrado");
+            //Instancia la excepción con su mensaje de respuesta
+        }
         Socio socioExistente = socioRepository.findById(id).get();     //Se extrae el Socio existente buscandolo por el "id" introducido
         if (Objects.nonNull(socio.getDni()) && !"".equalsIgnoreCase(socio.getDni())) {        //Comprueba que no se está introduciendo un nombre nulo
             socioExistente.setDni(socio.getDni());                                            //Sustituye el nombre del socio existente por el nuevo
@@ -58,14 +68,19 @@ public class SocioServiceIMP implements SocioService {
         if (Objects.nonNull(socio.getEmail()) && !"".equalsIgnoreCase(socio.getEmail())) {  //Comprueba que no se está introduciendo un email nulo
             socioExistente.setEmail(socio.getEmail());                                      //Sustityue el email del socio existente por el nuevo
         }
-        return socioRepository.save(socioExistente);    //Guarda el socio existente con los cambios realizados (UPDATE)
+        return socioRepository.save(socioExistente);
+        //Guarda el socio existente con los cambios realizados (UPDATE)
     }
 
     @Override
-    public void deleteSocio(int id) {
-        socioRepository.deleteById(id);                  //Llama al método del Repositorio para borrar el socio por el "id" introducido (DELETE)
+    public void deleteSocio(int id) throws NotFoundException {
+        Optional<Socio> socio = socioRepository.findSocioById(id);
+        if (!socio.isPresent()) {
+            throw new NotFoundException("El socio no está registrado");
+        }
+        socioRepository.deleteById(id);
+        //Llama al método del Repositorio para borrar el socio por el "id" introducido (DELETE)
     }
-
 
     //CONSULTAS ESPECÍFICAS
 
