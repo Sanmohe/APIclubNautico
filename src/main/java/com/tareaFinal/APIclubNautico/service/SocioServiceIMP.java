@@ -41,19 +41,10 @@ public class SocioServiceIMP implements SocioService {
 
         for (Socio socio : socios) {
             SocioDTO socioDTO = new SocioDTO();
-            socioDTO.setId(socio.getId());
-            socioDTO.setDni(socio.getDni());
-            socioDTO.setNombre(socio.getNombre());
-            socioDTO.setApellido1(socio.getApellido1());
-            socioDTO.setApellido2(socio.getApellido2());
-            //Se insertan los valores de la entidad en socioDTO
-
-            // Se obtiene el ID del patrón y se incluye en el DTO
-            if (socio.getPatron() != null) {
-                //Solo si el socio tiene asignado un patrón
-                socioDTO.setIdPatron(socio.getPatron().getId());
-            }
+            socioDTO.convierteDTO(socio);
+            //Este método pasa todos los valores de cada socio a un socioDTO
             socioDTOs.add(socioDTO);
+            //Se añade cada socioDTO a la lista
         }
         return socioDTOs;
     }
@@ -67,7 +58,7 @@ public class SocioServiceIMP implements SocioService {
         //En lugar de devolver un "null" devuelve un "optional" que indica la posibilidad de ausencia de un valor
         //Si el valor optional existe, hay que usar GET para acceder.
         if (socioExistente.isPresent()) {
-            throw new AlreadyExistsException("El socio que intenta crear ya existe");
+            throw new AlreadyExistsException("Ya existe un socio registrado con ese DNI");
             //Si el socio ya está registrado con ese DNI, la operación lanza la excepción.
         }
 
@@ -92,16 +83,9 @@ public class SocioServiceIMP implements SocioService {
         //Guarda el socio y copia sus datos a socioNuevo (SAVE)
 
         SocioDTO socioDTO = new SocioDTO();
-        socioDTO.setId(socioNuevo.getId());
-        socioDTO.setDni(socioNuevo.getDni());
-        socioDTO.setNombre(socioNuevo.getNombre());
-        socioDTO.setApellido1(socioNuevo.getApellido1());
-        socioDTO.setApellido2(socioNuevo.getApellido2());
+        socioDTO.convierteDTO(socioNuevo);
+        //Este método pasa todos los valores de socioNuevo a socioDTO
 
-        if (socio.getPatron() != null) {
-            //Solo si el socio tiene asignado un patrón
-            socioDTO.setIdPatron(socioNuevo.getPatron().getId());
-        }
         return socioDTO;
         //Devuelve el DTO
     }
@@ -130,27 +114,27 @@ public class SocioServiceIMP implements SocioService {
         //Si no se da ningún caso anterior, se actualiza el socio:
         Socio socioCopia = socioExistente.get();
         //Se extrae una copia del Socio existente y se sustituyen los datos:
-        if (Objects.nonNull(socio.getDni()) && !"".equalsIgnoreCase(socio.getDni())) {
-            //Comprueba que no se está introduciendo un nombre nulo
+        if (socio.getDni() != null && !"".equalsIgnoreCase(socio.getDni())) {
+            //Comprueba que no se está introduciendo un campo nulo o vacío
             socioCopia.setDni(socio.getDni());
             //Solo entonces sustituye el valor existente por el nuevo
         }
-        if (Objects.nonNull(socio.getNombre()) && !"".equalsIgnoreCase(socio.getNombre())) {
+        if (socio.getNombre() != null && !"".equalsIgnoreCase(socio.getNombre())) {
             socioCopia.setNombre(socio.getNombre());
         }
-        if (Objects.nonNull(socio.getApellido1()) && !"".equalsIgnoreCase(socio.getApellido1())) {
+        if (socio.getApellido1() != null && !"".equalsIgnoreCase(socio.getApellido1())) {
             socioCopia.setApellido1(socio.getApellido1());
         }
-        if (Objects.nonNull(socio.getApellido2()) && !"".equalsIgnoreCase(socio.getApellido2())) {
+        if (socio.getApellido2() != null && !"".equalsIgnoreCase(socio.getApellido2())) {
             socioCopia.setApellido2(socio.getApellido2());
         }
-        if (Objects.nonNull(socio.getDireccion()) && !"".equalsIgnoreCase(socio.getDireccion())) {
+        if (socio.getDireccion() != null && !"".equalsIgnoreCase(socio.getDireccion())) {
             socioCopia.setDireccion(socio.getDireccion());
         }
-        if (Objects.nonNull(socio.getTelefono())) {
+        if (socio.getTelefono() != 0) {
             socioCopia.setTelefono(socio.getTelefono());
         }
-        if (Objects.nonNull(socio.getEmail()) && !"".equalsIgnoreCase(socio.getEmail())) {
+        if (socio.getEmail() != null && !"".equalsIgnoreCase(socio.getEmail())) {
             socioCopia.setEmail(socio.getEmail());
         }
         if (socio.getPatron() != null) {
@@ -163,13 +147,13 @@ public class SocioServiceIMP implements SocioService {
             Optional<Patron> patronExistente = patronRepository.findPatronById(socioCopia.getPatron().getId());
             Patron patronCopia = patronExistente.get();
             //Se realiza copia del patron asociado
-            patronCopia.setDni(socio.getDni());
-            patronCopia.setNombre(socio.getNombre());
-            patronCopia.setApellido1(socio.getApellido1());
-            patronCopia.setApellido2(socio.getApellido2());
-            patronCopia.setDireccion(socio.getDireccion());
-            patronCopia.setTelefono(socio.getTelefono());
-            patronCopia.setEmail(socio.getEmail());
+            patronCopia.setDni(socioCopia.getDni());
+            patronCopia.setNombre(socioCopia.getNombre());
+            patronCopia.setApellido1(socioCopia.getApellido1());
+            patronCopia.setApellido2(socioCopia.getApellido2());
+            patronCopia.setDireccion(socioCopia.getDireccion());
+            patronCopia.setTelefono(socioCopia.getTelefono());
+            patronCopia.setEmail(socioCopia.getEmail());
             patronRepository.save(patronCopia);
             //Se guarda el patrón con los campos actualizados del socio vinculado.
         }
@@ -178,16 +162,8 @@ public class SocioServiceIMP implements SocioService {
         //Guarda el socio actualizado y copia sus datos a socioActualizado (UPDATE)
 
         SocioDTO socioDTO = new SocioDTO();
-        socioDTO.setId(socioActualizado.getId());
-        socioDTO.setDni(socioActualizado.getDni());
-        socioDTO.setNombre(socioActualizado.getNombre());
-        socioDTO.setApellido1(socioActualizado.getApellido1());
-        socioDTO.setApellido2(socioActualizado.getApellido2());
-
-        if (socioCopia.getPatron() != null) {
-        //Solo si el socio tiene asignado un patrón
-            socioDTO.setIdPatron(socioActualizado.getPatron().getId());
-        }
+        socioDTO.convierteDTO(socioCopia);
+        //Este método pasa todos los valores de socioCopia a socioDTO
 
         return socioDTO;
         //Devuelve el DTO
@@ -231,11 +207,8 @@ public class SocioServiceIMP implements SocioService {
         }
         Socio socioBuscado = socio.get();
         SocioDTO socioDTO = new SocioDTO();
-        socioDTO.setId(socioBuscado.getId());
-        socioDTO.setDni(socioBuscado.getDni());
-        socioDTO.setNombre(socioBuscado.getNombre());
-        socioDTO.setApellido1(socioBuscado.getApellido1());
-        socioDTO.setApellido2(socioBuscado.getApellido2());
+        socioDTO.convierteDTO(socioBuscado);
+        //Este método pasa todos los valores de socioBuscado a socioDTO
 
         return socioDTO;
     }
@@ -250,11 +223,8 @@ public class SocioServiceIMP implements SocioService {
 
         Socio socioBuscado = socio.get();
         SocioDTO socioDTO = new SocioDTO();
-        socioDTO.setId(socioBuscado.getId());
-        socioDTO.setDni(socioBuscado.getDni());
-        socioDTO.setNombre(socioBuscado.getNombre());
-        socioDTO.setApellido1(socioBuscado.getApellido1());
-        socioDTO.setApellido2(socioBuscado.getApellido2());
+        socioDTO.convierteDTO(socioBuscado);
+        //Este método pasa todos los valores de socioBuscado a socioDTO
 
         return socioDTO;
     }
@@ -269,11 +239,8 @@ public class SocioServiceIMP implements SocioService {
 
         Socio socioBuscado = socio.get();
         SocioDTO socioDTO = new SocioDTO();
-        socioDTO.setId(socioBuscado.getId());
-        socioDTO.setDni(socioBuscado.getDni());
-        socioDTO.setNombre(socioBuscado.getNombre());
-        socioDTO.setApellido1(socioBuscado.getApellido1());
-        socioDTO.setApellido2(socioBuscado.getApellido2());
+        socioDTO.convierteDTO(socioBuscado);
+        //Este método pasa todos los valores de socioBuscado a socioDTO
 
         return socioDTO;
     }

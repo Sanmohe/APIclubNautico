@@ -4,11 +4,15 @@ import com.tareaFinal.APIclubNautico.entity.Patron;
 import com.tareaFinal.APIclubNautico.entity.Socio;
 import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
 import com.tareaFinal.APIclubNautico.error.NotFoundException;
+import com.tareaFinal.APIclubNautico.error.dto.PatronDTO;
+import com.tareaFinal.APIclubNautico.error.dto.SocioDTO;
 import com.tareaFinal.APIclubNautico.repository.PatronRepository;
 import com.tareaFinal.APIclubNautico.repository.SocioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,125 +35,199 @@ public class PatronServiceIMP implements PatronService {
 
 
     @Override
-    public List<Patron> findAllPatrones() {
-        return patronRepository.findAll();
-        //Llama al método del Repositorio para listar todos los Patrons (READ)
+    public List<PatronDTO> findAllPatrones() {
+        List<Patron> patrones = patronRepository.findAll();
+        List<PatronDTO> patronDTOs = new ArrayList<>();
+
+        for (Patron patron : patrones) {
+            PatronDTO patronDTO = new PatronDTO();
+            patronDTO.convierteDTO(patron);
+            //Este método pasa todos los valores de cada patron a un patronDTO
+            patronDTOs.add(patronDTO);
+            //Se añade cada patronDTO a la lista
+        }
+        return patronDTOs;
     }
 
 
     @Override
-    public Patron savePatron(Patron patron) throws AlreadyExistsException {
+    public PatronDTO savePatron(Patron patron) throws AlreadyExistsException {
+        //EL DNI PERTENECE A OTRO PATRON REGISTRADO
         Optional<Patron> patronExistente = patronRepository.findPatronByDniIgnoreCase(patron.getDni());
         //Optional se usa para evitar el manejo directo de valores null. Encapsula valores.
         //En lugar de devolver un "null" devuelve un "optional" que indica la posibilidad de ausencia de un valor
         //Si el valor optional existe, hay que usar GET para acceder.
         if (patronExistente.isPresent()) {
-            throw new AlreadyExistsException("El patron que intenta crear ya existe");
+            throw new AlreadyExistsException("Ya existe un patrón registrado con ese DNI");
             //Si el patron ya está registrado con ese DNI, la operación lanza la excepción.
         }
 
         Optional<Socio> socioExistente = socioRepository.findSocioByDniIgnoreCase(patron.getDni());
         if (socioExistente.isPresent()) {
-            //Si ya existe un patrón con el mismo DNI...
+            //Si ya existe un socio con el mismo DNI...
             Socio socioCopia = socioExistente.get();
-            //Se crea una copia de dicho patrón
-            patron.setSocio(socioCopia);                 //Se introduce el socio (referencia)
+            //Se crea una copia de dicho socio
+            patron.setSocio(socioCopia);                   //Se introduce el patrón (referencia)
             patron.setNombre(socioCopia.getNombre());
             patron.setApellido1(socioCopia.getApellido1());
             patron.setApellido2(socioCopia.getApellido2());
             patron.setDireccion(socioCopia.getDireccion());
             patron.setTelefono(socioCopia.getTelefono());
             patron.setEmail(socioCopia.getEmail());
-            //Sustituye los datos del patrón por los del socio existente, para que exista coherencia
+            //Sustituye los datos del patron por los del socio existente, para que exista coherencia
             socioCopia.setPatron(patron);
             //En el socio se incluye el patron creado como referencia
-
-
         }
-        return patronRepository.save(patron);
-        //Guarda el socio (CREATE)
+
+        Patron patronNuevo = patronRepository.save(patron);
+        //Guarda el patron y copia sus datos a patronNuevo (SAVE)
+
+        PatronDTO patronDTO = new PatronDTO();
+        patronDTO.convierteDTO(patronNuevo);
+        //Este método pasa todos los valores de patronNuevo a patronDTO
+
+        return patronDTO;
+        //Devuelve el DTO
     }
 
-    /*
-    @Override
-    public Patron savePatron(Patron patron) throws AlreadyExistsException {
-        Optional<Patron> patronExistente = patronRepository.findPatronByDniIgnoreCase(patron.getDni());
-        //Optional se usa para evitar el manejo directo de valores null. Encapsula valores.
-        //En lugar de devolver un "null" devuelve un "optional" que indica la posibilidad de ausencia de un valor
-        //Si el valor optional existe, hay que usar GET para acceder.
-        if (patronExistente.isPresent()) {
-            throw new AlreadyExistsException("El patron que intenta crear ya existe");
-        }
-        return patronRepository.save(patron);
-        //Guarda el patron (CREATE)
-    }
-    */
 
-
+    @Transactional
     @Override
-    public Patron updatePatron(int id, Patron patron) throws NotFoundException {
-        Optional<Patron> patronExistenteOpcional = patronRepository.findPatronById(id);
-        if (!patronExistenteOpcional.isPresent()) {     //Si el patron no está presente...
+    public PatronDTO updatePatron(int id, Patron patron) throws NotFoundException, AlreadyExistsException {
+        //EL PATRON YA EXISTE
+        Optional<Patron> patronExistente = patronRepository.findPatronById(id);
+        //Se busca un patron existente por la ID introducida
+        if (!patronExistente.isPresent()) {
+            //Si el patron no está presente...
             throw new NotFoundException("El patron no está registrado");
             //Instancia la excepción con su mensaje de respuesta
         }
-        Patron patronExistente = patronRepository.findById(id).get();     //Se extrae el Patron existente buscandolo por el "id" introducido
-        if (Objects.nonNull(patron.getDni()) && !"".equalsIgnoreCase(patron.getDni())) {        //Comprueba que no se está introduciendo un nombre nulo
-            patronExistente.setDni(patron.getDni());                                            //Sustituye el nombre del patron existente por el nuevo
+
+        //EL DNI PERTENECE A OTRO PATRON REGISTRADO
+        Optional<Patron> patronMismoDNI = patronRepository.findPatronByDniIgnoreCase(patron.getDni());
+        //Se busca un patron existente que tenga el mismo DNI que el proporcionado en la petición
+        if (patronMismoDNI.isPresent() && (patronMismoDNI.get().getId() != id)) {
+            throw new AlreadyExistsException("El DNI introducido ya pertenece a otro patron con distinto ID");
+            //Si el DNI proporcionado coincide con el DNI de otro Patron (con distinta id), lanza la excepción (el DNI debe ser único)
         }
-        if (Objects.nonNull(patron.getNombre()) && !"".equalsIgnoreCase(patron.getNombre())) {        //Comprueba que no se está introduciendo un nombre nulo
-            patronExistente.setNombre(patron.getNombre());                                            //Sustituye el nombre del patron existente por el nuevo
+
+        //Si no se da ningún caso anterior, se actualiza el patron:
+        Patron patronCopia = patronExistente.get();
+        //Se extrae una copia del Patron existente y se sustituyen los datos:
+        if (patron.getDni() != null && !"".equalsIgnoreCase(patron.getDni())) {
+            //Comprueba que no se está introduciendo un campo nulo
+            patronCopia.setDni(patron.getDni());
+            //Solo entonces sustituye el valor existente por el nuevo
         }
-        if (Objects.nonNull(patron.getApellido1()) && !"".equalsIgnoreCase(patron.getApellido1())) {  //Comprueba que no se está introduciendo un apellido1 nulo
-            patronExistente.setApellido1(patron.getApellido1());                                      //Sustituye el apellido1 del patron existente por el nuevo
+        if (patron.getNombre() != null && !"".equalsIgnoreCase(patron.getNombre())) {
+            patronCopia.setNombre(patron.getNombre());
         }
-        if (Objects.nonNull(patron.getApellido2()) && !"".equalsIgnoreCase(patron.getApellido2())) {  //Comprueba que no se está introduciendo un apellido2 nulo
-            patronExistente.setApellido2(patron.getApellido2());                                      //Sustituye el apellido2 del patron existente por el nuevo
+        if (patron.getApellido1() != null && !"".equalsIgnoreCase(patron.getApellido1())) {
+            patronCopia.setApellido1(patron.getApellido1());
         }
-        if (Objects.nonNull(patron.getDireccion()) && !"".equalsIgnoreCase(patron.getDireccion())) {  //Comprueba que no se está introduciendo una dirección nula
-            patronExistente.setDireccion(patron.getDireccion());                                      //Sustituye la dirección del patron existente por la nueva
+        if (patron.getApellido2() != null && !"".equalsIgnoreCase(patron.getApellido2())) {
+            patronCopia.setApellido2(patron.getApellido2());
         }
-        if (Objects.nonNull(patron.getTelefono())) {    //Comprueba que no se está introduciendo un teléfono nulo
-            patronExistente.setTelefono(patron.getTelefono());                                                        //Sustituye el teléfono del patron existente por el nuevo
+        if (patron.getDireccion() != null && !"".equalsIgnoreCase(patron.getDireccion())) {
+            patronCopia.setDireccion(patron.getDireccion());
         }
-        if (Objects.nonNull(patron.getEmail()) && !"".equalsIgnoreCase(patron.getEmail())) {  //Comprueba que no se está introduciendo un email nulo
-            patronExistente.setEmail(patron.getEmail());                                      //Sustityue el email del patron existente por el nuevo
+        if (patron.getTelefono() != 0) {
+            patronCopia.setTelefono(patron.getTelefono());
         }
-        return patronRepository.save(patronExistente);
-        //Guarda el patron existente con los cambios realizados (UPDATE)
+        if (patron.getEmail() != null && !"".equalsIgnoreCase(patron.getEmail())) {
+            patronCopia.setEmail(patron.getEmail());
+        }
+        if (patron.getSocio() != null) {
+            patronCopia.setSocio(patron.getSocio());
+        }
+
+        //Si el patron a actualizar también es socio, la actualización debe afectar también a dicho socio (coherencia)
+        if (patronCopia.getSocio() != null) {
+            //Si el patron existente está asociado a un ID de socio
+            Optional<Socio> socioExistente = socioRepository.findSocioById(patronCopia.getSocio().getId());
+            Socio socioCopia = socioExistente.get();
+            //Se realiza copia del socio vinculado
+            socioCopia.setDni(patronCopia.getDni());
+            socioCopia.setNombre(patronCopia.getNombre());
+            socioCopia.setApellido1(patronCopia.getApellido1());
+            socioCopia.setApellido2(patronCopia.getApellido2());
+            socioCopia.setDireccion(patronCopia.getDireccion());
+            socioCopia.setTelefono(patronCopia.getTelefono());
+            socioCopia.setEmail(patronCopia.getEmail());
+            socioRepository.save(socioCopia);
+            //Se guarda el socio con los campos actualizados del patron vinculado.
+        }
+
+        Patron patronActualizado = patronRepository.save(patronCopia);
+        //Guarda el patron actualizado y copia sus datos a patronActualizado (UPDATE)
+
+        PatronDTO patronDTO = new PatronDTO();
+        patronDTO.convierteDTO(patronActualizado);
+        //Este método pasa todos los valores de patronActualizado a patronDTO
+
+        return patronDTO;
+        //Devuelve el DTO
     }
+
 
     @Override
     public void deletePatron(int id) throws NotFoundException {
+        //EL PATRON NO EXISTE
         Optional<Patron> patron = patronRepository.findPatronById(id);
         if (!patron.isPresent()) {
             throw new NotFoundException("El patron no está registrado");
         }
+
+        Patron patronBorrado = patron.get();
+        if (patronBorrado.getSocio() !=null) {
+            //Si el patron tiene un patrón vinculado
+            Socio socio = patronBorrado.getSocio();
+            //Se realiza copia del socio
+            socio.setPatron(null);
+            //Se desvincula el patrón del socio
+            patronBorrado.setSocio(null);
+            //Se desvincula el socio del patron
+            socioRepository.save(socio);
+            //Se guarda el socio actualizado
+        }
+
         patronRepository.deleteById(id);
         //Llama al método del Repositorio para borrar el patron por el "id" introducido (DELETE)
     }
 
+
+
     //CONSULTAS ESPECÍFICAS
 
     @Override
-    public Patron findPatronById(int id) throws NotFoundException {
+    public PatronDTO findPatronById(int id) throws NotFoundException {
         Optional<Patron> patron = patronRepository.findPatronById(id);
         if (!patron.isPresent()) {     //Si el patron no está presente...
             throw new NotFoundException("El patron no está registrado");
             //Instancia la excepción con su mensaje de respuesta
         }
-        return patron.get();
-        //Si el patron existe, devuelve, el objeto Patron contenido en <Optional> mediante "get"
+        Patron patronBuscado = patron.get();
+        PatronDTO patronDTO = new PatronDTO();
+        patronDTO.convierteDTO(patronBuscado);
+        //Este método pasa todos los valores de patronBuscado a patronDTO
+
+        return patronDTO;
     }
 
     @Override
-    public Patron findPatronByDniIgnoreCase(String dni) throws NotFoundException {
+    public PatronDTO findPatronByDniIgnoreCase(String dni) throws NotFoundException {
         Optional<Patron> patron = patronRepository.findPatronByDniIgnoreCase(dni);
         if (!patron.isPresent()) {     //Si el patron no está presente...
             throw new NotFoundException("El patron no está registrado");
             //Instancia la excepción con su mensaje de respuesta
         }
-        return patron.get();
-        //Si el patron existe, devuelve, el objeto Patron contenido en <Optional> mediante "get"
+
+        Patron patronBuscado = patron.get();
+        PatronDTO patronDTO = new PatronDTO();
+        patronDTO.convierteDTO(patronBuscado);
+        //Este método pasa todos los valores de patronBuscado a patronDTO
+
+        return patronDTO;
     }
+
 }
