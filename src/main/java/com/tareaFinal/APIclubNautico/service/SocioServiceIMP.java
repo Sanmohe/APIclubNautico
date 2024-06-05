@@ -88,7 +88,7 @@ public class SocioServiceIMP implements SocioService {
         }
 
         Socio socioNuevo = socioRepository.save(socio);
-        //Guarda el socio y copia sus datos a socioNuevo
+        //Guarda el socio y copia sus datos a socioNuevo (SAVE)
 
         SocioDTO socioDTO = new SocioDTO();
         socioDTO.setId(socioNuevo.getId());
@@ -102,13 +102,13 @@ public class SocioServiceIMP implements SocioService {
             socioDTO.setIdPatron(socioNuevo.getPatron().getId());
         }
         return socioDTO;
-        //Guarda el socio (CREATE)
+        //Devuelve el DTO
     }
 
 
     @Transactional
     @Override
-    public Socio updateSocio(int id, Socio socio) throws NotFoundException, AlreadyExistsException {
+    public SocioDTO updateSocio(int id, Socio socio) throws NotFoundException, AlreadyExistsException {
         Optional<Socio> socioExistente = socioRepository.findSocioById(id);
         //Se busca un socio existente por la ID introducida
         if (!socioExistente.isPresent()) {
@@ -117,8 +117,6 @@ public class SocioServiceIMP implements SocioService {
             //Instancia la excepción con su mensaje de respuesta
         }
 
-        Socio socioCopia = socioExistente.get();
-        //Se extrae una copia del Socio existente
         Optional<Socio> socioMismoDNI = socioRepository.findSocioByDniIgnoreCase(socio.getDni());
         //Se busca un socio existente que tenga el mismo DNI que el proporcionado en la petición de actualización
         if (socioMismoDNI.isPresent() && (socioMismoDNI.get().getId() != id)) {
@@ -126,21 +124,37 @@ public class SocioServiceIMP implements SocioService {
             //Si el DNI proporcionado coincide con el DNI de otro Socio (con distinta id), lanza la excepción (el DNI debe ser único)
         }
 
-        //Si se da ningún caso anterior, se actualiza el socio:
-        socioCopia.setDni(socio.getDni());
-        //Sustituye el nombre del socio existente por el nuevo proporcionado. Análogamente:
-        socioCopia.setNombre(socio.getNombre());
-        socioCopia.setApellido1(socio.getApellido1());
-        socioCopia.setApellido2(socio.getApellido2());
-        socioCopia.setDireccion(socio.getDireccion());
-        socioCopia.setTelefono(socio.getTelefono());
-        socioCopia.setEmail(socio.getEmail());
+        //Si no se da ningún caso anterior, se actualiza el socio:
+        Socio socioCopia = socioExistente.get();
+        //Se extrae una copia del Socio existente y se sustituyen los datos:
+        if (Objects.nonNull(socio.getDni()) && !"".equalsIgnoreCase(socio.getDni())) {
+            //Comprueba que no se está introduciendo un nombre nulo
+            socioCopia.setDni(socio.getDni());
+            //Solo entonces sustituye el valor existente por el nuevo
+        }
+        if (Objects.nonNull(socio.getNombre()) && !"".equalsIgnoreCase(socio.getNombre())) {
+            socioCopia.setNombre(socio.getNombre());
+        }
+        if (Objects.nonNull(socio.getApellido1()) && !"".equalsIgnoreCase(socio.getApellido1())) {
+            socioCopia.setApellido1(socio.getApellido1());
+        }
+        if (Objects.nonNull(socio.getApellido2()) && !"".equalsIgnoreCase(socio.getApellido2())) {
+            socioCopia.setApellido2(socio.getApellido2());
+        }
+        if (Objects.nonNull(socio.getDireccion()) && !"".equalsIgnoreCase(socio.getDireccion())) {
+            socioCopia.setDireccion(socio.getDireccion());
+        }
+        if (Objects.nonNull(socio.getTelefono())) {
+            socioCopia.setTelefono(socio.getTelefono());
+        }
+        if (Objects.nonNull(socio.getEmail()) && !"".equalsIgnoreCase(socio.getEmail())) {
+            socioCopia.setEmail(socio.getEmail());
+        }
 
-        /*
         //Si el socio a actualizar también es patrón, la actualización debe afectar también a dicho patrón (coherencia)
-        if (socioExistente.getIdPatron() != 0) {
+        if (socioCopia.getPatron() != null) {
             //Si el socio existente está asociado a un ID de patrón
-            Optional<Patron> patronExistente = patronRepository.findPatronById(socioExistente.getIdPatron());
+            Optional<Patron> patronExistente = patronRepository.findPatronById(socioCopia.getPatron().getId());
             Patron patronCopia = patronExistente.get();
             //Se realiza copia del patron asociado
             patronCopia.setDni(socio.getDni());
@@ -151,12 +165,26 @@ public class SocioServiceIMP implements SocioService {
             patronCopia.setTelefono(socio.getTelefono());
             patronCopia.setEmail(socio.getEmail());
             patronRepository.save(patronCopia);
+            //Se guarda el patrón con los campos actualizados del socio vinculado.
         }
-        */
-        return socioRepository.save(socioCopia);
-        //Guarda el socio existente con los cambios realizados (UPDATE)
-    }
 
+        Socio socioActualizado = socioRepository.save(socioCopia);
+        //Guarda el socio actualizado y copia sus datos a socioActualizado (UPDATE)
+
+        SocioDTO socioDTO = new SocioDTO();
+        socioDTO.setId(socioActualizado.getId());
+        socioDTO.setDni(socioActualizado.getDni());
+        socioDTO.setNombre(socioActualizado.getNombre());
+        socioDTO.setApellido1(socioActualizado.getApellido1());
+        socioDTO.setApellido2(socioActualizado.getApellido2());
+
+        if (socioCopia.getPatron() != null) {
+        //Solo si el socio tiene asignado un patrón
+            socioDTO.setIdPatron(socioActualizado.getPatron().getId());
+    }
+        return socioDTO;
+        //Devuelve el DTO
+}
     /*
     @Override
     public Socio updateSocio(int id, Socio socio) throws NotFoundException, AlreadyExistsException {
