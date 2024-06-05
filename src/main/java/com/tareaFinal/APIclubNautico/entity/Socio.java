@@ -21,9 +21,6 @@ public class Socio {
     //Decido no usar el DNI como PK, para poder tener un registro de socios d ela propia aplicación
     //Un identificador de socio propio del ClubNáutico
 
-    @Column
-    private int idPatron;
-
     @NotBlank(message = "Campo obligatorio")    //Indica que el campo no pueda dejarse en blanco o nulo
     @Length(min=9, max=9, message = "Introduzca un DNI válido")     //Valida el valor del DNI
     @Column (unique = true, nullable = false)   //Especifica que el DNI debe ser único en la BD

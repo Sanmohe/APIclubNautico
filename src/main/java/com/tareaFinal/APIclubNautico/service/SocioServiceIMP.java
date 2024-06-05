@@ -54,15 +54,16 @@ public class SocioServiceIMP implements SocioService {
             //Si ya existe un patrón con el mismo DNI...
             Patron patronCopia = patronExistente.get();
             //Se crea una copia de dicho patrón
-            socio.setIdPatron(patronCopia.getId());         //Se introduce el ID del patrón (referencia)
+            socio.setPatron(patronCopia);                   //Se introduce el patrón (referencia)
             socio.setNombre(patronCopia.getNombre());
             socio.setApellido1(patronCopia.getApellido1());
             socio.setApellido2(patronCopia.getApellido2());
             socio.setDireccion(patronCopia.getDireccion());
             socio.setTelefono(patronCopia.getTelefono());
             socio.setEmail(patronCopia.getEmail());
-            System.out.println("Ya existe un patrón con el mismo DNI, se mantienen los datos del mismo");
             //Sustituye los datos del socio por los del patrón existente, para que exista coherencia
+            patronCopia.setSocio(socio);
+            //En el patrón se incluye el socio creado como referencia
         }
         return socioRepository.save(socio);
         //Guarda el socio (CREATE)

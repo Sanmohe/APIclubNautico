@@ -1,9 +1,11 @@
 package com.tareaFinal.APIclubNautico.service;
 
 import com.tareaFinal.APIclubNautico.entity.Patron;
+import com.tareaFinal.APIclubNautico.entity.Socio;
 import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
 import com.tareaFinal.APIclubNautico.error.NotFoundException;
 import com.tareaFinal.APIclubNautico.repository.PatronRepository;
+import com.tareaFinal.APIclubNautico.repository.SocioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +23,54 @@ public class PatronServiceIMP implements PatronService {
     ///Se inyecta automáticamente una instancia del Repositorio en la variable
     //Permite que el controlador use los métodos del Repositorio sin necesidad de instanciarlo manualmente.
 
+    @Autowired
+    //Inyección de dependencias
+    SocioRepository socioRepository;
+    ///Se inyecta automáticamente una instancia del Repositorio en la variable
+    //Permite que el controlador use los métodos del Repositorio sin necesidad de instanciarlo manualmente.
+
+
     @Override
     public List<Patron> findAllPatrones() {
         return patronRepository.findAll();
         //Llama al método del Repositorio para listar todos los Patrons (READ)
     }
 
+
+    @Override
+    public Patron savePatron(Patron patron) throws AlreadyExistsException {
+        Optional<Patron> patronExistente = patronRepository.findPatronByDniIgnoreCase(patron.getDni());
+        //Optional se usa para evitar el manejo directo de valores null. Encapsula valores.
+        //En lugar de devolver un "null" devuelve un "optional" que indica la posibilidad de ausencia de un valor
+        //Si el valor optional existe, hay que usar GET para acceder.
+        if (patronExistente.isPresent()) {
+            throw new AlreadyExistsException("El patron que intenta crear ya existe");
+            //Si el patron ya está registrado con ese DNI, la operación lanza la excepción.
+        }
+
+        Optional<Socio> socioExistente = socioRepository.findSocioByDniIgnoreCase(patron.getDni());
+        if (socioExistente.isPresent()) {
+            //Si ya existe un patrón con el mismo DNI...
+            Socio socioCopia = socioExistente.get();
+            //Se crea una copia de dicho patrón
+            patron.setSocio(socioCopia);                 //Se introduce el socio (referencia)
+            patron.setNombre(socioCopia.getNombre());
+            patron.setApellido1(socioCopia.getApellido1());
+            patron.setApellido2(socioCopia.getApellido2());
+            patron.setDireccion(socioCopia.getDireccion());
+            patron.setTelefono(socioCopia.getTelefono());
+            patron.setEmail(socioCopia.getEmail());
+            //Sustituye los datos del patrón por los del socio existente, para que exista coherencia
+            socioCopia.setPatron(patron);
+            //En el socio se incluye el patron creado como referencia
+
+
+        }
+        return patronRepository.save(patron);
+        //Guarda el socio (CREATE)
+    }
+
+    /*
     @Override
     public Patron savePatron(Patron patron) throws AlreadyExistsException {
         Optional<Patron> patronExistente = patronRepository.findPatronByDniIgnoreCase(patron.getDni());
@@ -39,6 +83,8 @@ public class PatronServiceIMP implements PatronService {
         return patronRepository.save(patron);
         //Guarda el patron (CREATE)
     }
+    */
+
 
     @Override
     public Patron updatePatron(int id, Patron patron) throws NotFoundException {
