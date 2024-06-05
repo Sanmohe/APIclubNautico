@@ -4,6 +4,7 @@ import com.tareaFinal.APIclubNautico.entity.Patron;
 import com.tareaFinal.APIclubNautico.entity.Socio;
 import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
 import com.tareaFinal.APIclubNautico.error.NotFoundException;
+import com.tareaFinal.APIclubNautico.error.dto.SocioDTO;
 import com.tareaFinal.APIclubNautico.repository.PatronRepository;
 import com.tareaFinal.APIclubNautico.repository.SocioRepository;
 import jakarta.transaction.Transactional;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,10 +35,29 @@ public class SocioServiceIMP implements SocioService {
 
 
     @Override
-    public List<Socio> findAllSocios() {
-        return socioRepository.findAll();
-        //Llama al método del Repositorio para listar todos los Socios (READ)
+    public List<SocioDTO> findAllSocios() {
+        List<Socio> socios = socioRepository.findAll();
+        List<SocioDTO> socioDTOs = new ArrayList<>();
+
+        for (Socio socio : socios) {
+            SocioDTO socioDTO = new SocioDTO();
+            socioDTO.setId(socio.getId());
+            socioDTO.setDni(socio.getDni());
+            socioDTO.setNombre(socio.getNombre());
+            socioDTO.setApellido1(socio.getApellido1());
+            socioDTO.setApellido2(socio.getApellido2());
+
+            // Se obtiene el ID del patrón y se incluye en el DTO
+            if (socio.getPatron() != null) {
+                //Solo si el socio tiene asignado un patrón
+                socioDTO.setIdPatron(socio.getPatron().getId());
+            }
+
+            socioDTOs.add(socioDTO);
+        }
+        return socioDTOs;
     }
+
 
     @Override
     public Socio saveSocio(Socio socio) throws AlreadyExistsException {

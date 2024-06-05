@@ -3,12 +3,13 @@ package com.tareaFinal.APIclubNautico.service;
 import com.tareaFinal.APIclubNautico.entity.Socio;
 import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
 import com.tareaFinal.APIclubNautico.error.NotFoundException;
+import com.tareaFinal.APIclubNautico.error.dto.SocioDTO;
 
 import java.util.List;
 
 public interface SocioService {
 
-    List<Socio> findAllSocios();
+    List<SocioDTO> findAllSocios();
     //Método que devolverá una lista de elementos Socio (READ)
 
     Socio findSocioById(int id) throws NotFoundException;

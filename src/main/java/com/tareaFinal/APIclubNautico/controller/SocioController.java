@@ -3,6 +3,7 @@ package com.tareaFinal.APIclubNautico.controller;
 import com.tareaFinal.APIclubNautico.entity.Socio;
 import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
 import com.tareaFinal.APIclubNautico.error.NotFoundException;
+import com.tareaFinal.APIclubNautico.error.dto.SocioDTO;
 import com.tareaFinal.APIclubNautico.service.SocioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class SocioController {
 
     @GetMapping("/findAllSocios")
         //Mapea las solicitudes GET a la URL indicada
-    List<Socio> findAllSocios() {
+    List<SocioDTO> findAllSocios() {
         return socioService.findAllSocios();
         //Llama al método del Servicio para devolver la lista de todos los socios
     }
