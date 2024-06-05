@@ -71,7 +71,7 @@ public class SocioController {
 
     @PutMapping("/updateSocio/{id}")
         //Mapea las solicitudes PUT a la url indicada junto con el parámetro "id"
-    Socio updateSocio(@PathVariable int id, @Valid @RequestBody Socio socio) throws NotFoundException {
+    Socio updateSocio(@PathVariable int id, @Valid @RequestBody Socio socio) throws NotFoundException, AlreadyExistsException {
         //Indica que va a capturar el parámetro "id" de la URL y que el cuerpo de la peticion HTTP y mapeará al objeto Socio con ese "id"
         //Y que puede arrojar la excepción de "no encontrado"
         //@Valid exige que se validen los datos

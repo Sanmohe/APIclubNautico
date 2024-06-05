@@ -1,4 +1,5 @@
 CREATE DATABASE clubNautico;
+USE clubNautico;
 
 CREATE TABLE socio (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -19,9 +20,7 @@ CREATE TABLE patron (
     apellido2 VARCHAR(50),
     direccion VARCHAR(50),
     telefono INT,
-    email VARCHAR(50),
-    idSocio INT, 
-    FOREIGN KEY (idSocio) REFERENCES socio(id)
+    email VARCHAR(50)
 );
 
 CREATE TABLE barco (

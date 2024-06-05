@@ -61,7 +61,7 @@ public class PatronController {
 
     @PutMapping("/updatePatron/{id}")
         //Mapea las solicitudes PUT a la url indicada junto con el parámetro "id"
-    Patron updatePatron(@PathVariable int id, @Valid @RequestBody Patron patron) throws NotFoundException {
+    Patron updatePatron(@PathVariable int id, @Valid @RequestBody Patron patron) throws NotFoundException, AlreadyExistsException {
         //Indica que va a capturar el parámetro "id" de la URL y que el cuerpo de la peticion HTTP y mapeará al objeto Patron con ese "id"
         //Y que puede arrojar la excepción de "no encontrado"
         //@Valid exige que se validen los datos

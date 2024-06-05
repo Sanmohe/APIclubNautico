@@ -23,7 +23,7 @@ public interface PatronService {
     //Método que guardará el registro de un nuevo Patron (CREATE)
     //Puede arrojar la excepción "ya existe"
 
-    Patron updatePatron (int id, Patron patron) throws NotFoundException;;
+    Patron updatePatron (int id, Patron patron) throws NotFoundException, AlreadyExistsException;
     //Método que actualizará el registro de un Patron existente (UPDATE)
     //Puede arrojar la excepción "no encontrado"
 

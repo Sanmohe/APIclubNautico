@@ -1,9 +1,12 @@
 package com.tareaFinal.APIclubNautico.service;
 
+import com.tareaFinal.APIclubNautico.entity.Patron;
 import com.tareaFinal.APIclubNautico.entity.Socio;
 import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
 import com.tareaFinal.APIclubNautico.error.NotFoundException;
+import com.tareaFinal.APIclubNautico.repository.PatronRepository;
 import com.tareaFinal.APIclubNautico.repository.SocioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,13 @@ public class SocioServiceIMP implements SocioService {
     ///Se inyecta automáticamente una instancia del Repositorio en la variable
     //Permite que el controlador use los métodos del Repositorio sin necesidad de instanciarlo manualmente.
 
+    @Autowired
+    //Inyección de dependencias
+    PatronRepository patronRepository;
+    ///Se inyecta automáticamente una instancia del Repositorio en la variable
+    //Permite que el controlador use los métodos del Repositorio sin necesidad de instanciarlo manualmente.
+
+
     @Override
     public List<Socio> findAllSocios() {
         return socioRepository.findAll();
@@ -36,13 +46,100 @@ public class SocioServiceIMP implements SocioService {
         //Si el valor optional existe, hay que usar GET para acceder.
         if (socioExistente.isPresent()) {
             throw new AlreadyExistsException("El socio que intenta crear ya existe");
+            //Si el socio ya está registrado con ese DNI, la operación lanza la excepción.
+        }
+
+        Optional<Patron> patronExistente = patronRepository.findPatronByDniIgnoreCase(socio.getDni());
+        if (patronExistente.isPresent()) {
+            //Si ya existe un patrón con el mismo DNI...
+            Patron patronCopia = patronExistente.get();
+            //Se crea una copia de dicho patrón
+            socio.setIdPatron(patronCopia.getId());         //Se introduce el ID del patrón (referencia)
+            socio.setNombre(patronCopia.getNombre());
+            socio.setApellido1(patronCopia.getApellido1());
+            socio.setApellido2(patronCopia.getApellido2());
+            socio.setDireccion(patronCopia.getDireccion());
+            socio.setTelefono(patronCopia.getTelefono());
+            socio.setEmail(patronCopia.getEmail());
+            System.out.println("Ya existe un patrón con el mismo DNI, se mantienen los datos del mismo");
+            //Sustituye los datos del socio por los del patrón existente, para que exista coherencia
         }
         return socioRepository.save(socio);
         //Guarda el socio (CREATE)
     }
 
+
+   /*
     @Override
-    public Socio updateSocio(int id, Socio socio) throws NotFoundException {
+
+    public Socio saveSocio(Socio socio) throws AlreadyExistsException {
+        Optional<Socio> socioExistente = socioRepository.findSocioByDniIgnoreCase(socio.getDni());
+        //Optional se usa para evitar el manejo directo de valores null. Encapsula valores.
+        //En lugar de devolver un "null" devuelve un "optional" que indica la posibilidad de ausencia de un valor
+        //Si el valor optional existe, hay que usar GET para acceder.
+        if (socioExistente.isPresent()) {
+            throw new AlreadyExistsException("El socio que intenta crear ya existe");
+        }
+        return socioRepository.save(socio);
+        //Guarda el socio (CREATE)
+    }
+    */
+
+
+    @Transactional
+    @Override
+    public Socio updateSocio(int id, Socio socio) throws NotFoundException, AlreadyExistsException {
+        Optional<Socio> socioExistente = socioRepository.findSocioById(id);
+        //Se busca un socio existente por la ID introducida
+        if (!socioExistente.isPresent()) {
+            //Si el socio no está presente...
+            throw new NotFoundException("El socio no está registrado");
+            //Instancia la excepción con su mensaje de respuesta
+        }
+
+        Socio socioCopia = socioExistente.get();
+        //Se extrae una copia del Socio existente
+        Optional<Socio> socioMismoDNI = socioRepository.findSocioByDniIgnoreCase(socio.getDni());
+        //Se busca un socio existente que tenga el mismo DNI que el proporcionado en la petición de actualización
+        if (socioMismoDNI.isPresent() && (socioMismoDNI.get().getId() != id)) {
+            throw new AlreadyExistsException("El DNI introducido ya pertenece a otro socio con distinto ID");
+            //Si el DNI proporcionado coincide con el DNI de otro Socio (con distinta id), lanza la excepción (el DNI debe ser único)
+        }
+
+        //Si se da ningún caso anterior, se actualiza el socio:
+        socioCopia.setDni(socio.getDni());
+        //Sustituye el nombre del socio existente por el nuevo proporcionado. Análogamente:
+        socioCopia.setNombre(socio.getNombre());
+        socioCopia.setApellido1(socio.getApellido1());
+        socioCopia.setApellido2(socio.getApellido2());
+        socioCopia.setDireccion(socio.getDireccion());
+        socioCopia.setTelefono(socio.getTelefono());
+        socioCopia.setEmail(socio.getEmail());
+
+        /*
+        //Si el socio a actualizar también es patrón, la actualización debe afectar también a dicho patrón (coherencia)
+        if (socioExistente.getIdPatron() != 0) {
+            //Si el socio existente está asociado a un ID de patrón
+            Optional<Patron> patronExistente = patronRepository.findPatronById(socioExistente.getIdPatron());
+            Patron patronCopia = patronExistente.get();
+            //Se realiza copia del patron asociado
+            patronCopia.setDni(socio.getDni());
+            patronCopia.setNombre(socio.getNombre());
+            patronCopia.setApellido1(socio.getApellido1());
+            patronCopia.setApellido2(socio.getApellido2());
+            patronCopia.setDireccion(socio.getDireccion());
+            patronCopia.setTelefono(socio.getTelefono());
+            patronCopia.setEmail(socio.getEmail());
+            patronRepository.save(patronCopia);
+        }
+        */
+        return socioRepository.save(socioCopia);
+        //Guarda el socio existente con los cambios realizados (UPDATE)
+    }
+
+    /*
+    @Override
+    public Socio updateSocio(int id, Socio socio) throws NotFoundException, AlreadyExistsException {
         Optional<Socio> socioExistenteOpcional = socioRepository.findSocioById(id);
         if (!socioExistenteOpcional.isPresent()) {     //Si el socio no está presente...
             throw new NotFoundException("El socio no está registrado");
@@ -73,6 +170,7 @@ public class SocioServiceIMP implements SocioService {
         return socioRepository.save(socioExistente);
         //Guarda el socio existente con los cambios realizados (UPDATE)
     }
+     */
 
     @Override
     public void deleteSocio(int id) throws NotFoundException {
@@ -83,6 +181,8 @@ public class SocioServiceIMP implements SocioService {
         socioRepository.deleteById(id);
         //Llama al método del Repositorio para borrar el socio por el "id" introducido (DELETE)
     }
+
+
 
     //CONSULTAS ESPECÍFICAS
 

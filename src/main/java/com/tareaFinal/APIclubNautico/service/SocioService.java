@@ -27,9 +27,10 @@ public interface SocioService {
     //Método que guardará el registro de un nuevo Socio (CREATE)
     //Puede arrojar la excepción "ya existe"
 
-    Socio updateSocio (int id, Socio socio) throws NotFoundException;;
+    Socio updateSocio (int id, Socio socio) throws NotFoundException, AlreadyExistsException;
     //Método que actualizará el registro de un Socio existente (UPDATE)
     //Puede arrojar la excepción "no encontrado"
+    //Puede arrojar la excepción "ya existe"
 
     void deleteSocio (int id) throws NotFoundException;;
     //Método que borrará el registro de un Socio (DELETE)
