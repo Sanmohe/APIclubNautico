@@ -12,15 +12,15 @@ public interface SocioService {
     List<SocioDTO> findAllSocios();
     //Método que devolverá una lista de elementos Socio (READ)
 
-    Socio findSocioById(int id) throws NotFoundException;
+    SocioDTO findSocioById(int id) throws NotFoundException;
     //Método que devolverá los socios filtrados por "id"
     //Puede arrojar la excepción "no encontrado"
 
-    Socio findSocioByDniWithJPQL(String dni) throws NotFoundException;
+    SocioDTO findSocioByDniWithJPQL(String dni) throws NotFoundException;
     //Método que devolverá el socio filtrado por "dni" (JPQL)
     //Puede arrojar la excepción "no encontrado"
 
-    Socio findSocioByDniIgnoreCase(String dni) throws NotFoundException;
+    SocioDTO findSocioByDniIgnoreCase(String dni) throws NotFoundException;
     //Método que devolverá el socio filtrado por "dni"(Spring JPA)
     //Puede arrojar la excepción "no encontrado"
 

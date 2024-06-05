@@ -34,7 +34,7 @@ public class SocioController {
 
     @GetMapping("/findSocioById/{id}")
         //Mapea las solicitudes GET a la URL indicada junto con el parametro "id"
-    Socio findSocioById(@PathVariable int id) throws NotFoundException {
+    SocioDTO findSocioById(@PathVariable int id) throws NotFoundException {
         //Indica que va a capturar el parámetro "id" de la URL
         //Y que puede arrojar la excepción de "no encontrado"
         return socioService.findSocioById(id);
@@ -43,7 +43,7 @@ public class SocioController {
 
     @GetMapping("/findSocioByDniWithJPQL/{dni}")
         //Mapea las solicitudes GET a la URL indicada junto con el parámetro "dni"
-    Socio findSocioByNombreWithJPQL(@PathVariable String dni) throws NotFoundException {
+    SocioDTO findSocioByNombreWithJPQL(@PathVariable String dni) throws NotFoundException {
         //Indica que va a capturar el parámetro "dni" de la URL
         //Y que puede arrojar la excepción de "no encontrado"
         return socioService.findSocioByDniWithJPQL(dni);
@@ -52,7 +52,7 @@ public class SocioController {
 
     @GetMapping("/findSocioByDni/{dni}")
         //Mapea las solicitudes GET a la URL indicada junto con el parámetro "dni"
-    Socio findSocioByDniIgnoreCase(@PathVariable String dni) throws NotFoundException {
+    SocioDTO findSocioByDniIgnoreCase(@PathVariable String dni) throws NotFoundException {
         //Indica que va a capturar el parámetro "dni" de la URL
         //Y que puede arrojar la excepción de "no encontrado"
         return socioService.findSocioByDniIgnoreCase(dni);

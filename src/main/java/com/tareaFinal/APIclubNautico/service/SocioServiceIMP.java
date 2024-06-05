@@ -61,6 +61,7 @@ public class SocioServiceIMP implements SocioService {
 
     @Override
     public SocioDTO saveSocio(Socio socio) throws AlreadyExistsException {
+        //EL DNI PERTENECE A OTRO SOCIO REGISTRADO
         Optional<Socio> socioExistente = socioRepository.findSocioByDniIgnoreCase(socio.getDni());
         //Optional se usa para evitar el manejo directo de valores null. Encapsula valores.
         //En lugar de devolver un "null" devuelve un "optional" que indica la posibilidad de ausencia de un valor
@@ -109,6 +110,7 @@ public class SocioServiceIMP implements SocioService {
     @Transactional
     @Override
     public SocioDTO updateSocio(int id, Socio socio) throws NotFoundException, AlreadyExistsException {
+        //EL SOCIO YA EXISTE
         Optional<Socio> socioExistente = socioRepository.findSocioById(id);
         //Se busca un socio existente por la ID introducida
         if (!socioExistente.isPresent()) {
@@ -117,6 +119,7 @@ public class SocioServiceIMP implements SocioService {
             //Instancia la excepción con su mensaje de respuesta
         }
 
+        //EL DNI PERTENECE A OTRO SOCIO REGISTRADO
         Optional<Socio> socioMismoDNI = socioRepository.findSocioByDniIgnoreCase(socio.getDni());
         //Se busca un socio existente que tenga el mismo DNI que el proporcionado en la petición de actualización
         if (socioMismoDNI.isPresent() && (socioMismoDNI.get().getId() != id)) {
@@ -150,6 +153,9 @@ public class SocioServiceIMP implements SocioService {
         if (Objects.nonNull(socio.getEmail()) && !"".equalsIgnoreCase(socio.getEmail())) {
             socioCopia.setEmail(socio.getEmail());
         }
+        if (socio.getPatron() != null) {
+            socioCopia.setPatron(socio.getPatron());
+        }
 
         //Si el socio a actualizar también es patrón, la actualización debe afectar también a dicho patrón (coherencia)
         if (socioCopia.getPatron() != null) {
@@ -181,47 +187,15 @@ public class SocioServiceIMP implements SocioService {
         if (socioCopia.getPatron() != null) {
         //Solo si el socio tiene asignado un patrón
             socioDTO.setIdPatron(socioActualizado.getPatron().getId());
-    }
+        }
+
         return socioDTO;
         //Devuelve el DTO
 }
-    /*
-    @Override
-    public Socio updateSocio(int id, Socio socio) throws NotFoundException, AlreadyExistsException {
-        Optional<Socio> socioExistenteOpcional = socioRepository.findSocioById(id);
-        if (!socioExistenteOpcional.isPresent()) {     //Si el socio no está presente...
-            throw new NotFoundException("El socio no está registrado");
-            //Instancia la excepción con su mensaje de respuesta
-        }
-        Socio socioExistente = socioRepository.findById(id).get();     //Se extrae el Socio existente buscandolo por el "id" introducido
-        if (Objects.nonNull(socio.getDni()) && !"".equalsIgnoreCase(socio.getDni())) {        //Comprueba que no se está introduciendo un nombre nulo
-            socioExistente.setDni(socio.getDni());                                            //Sustituye el nombre del socio existente por el nuevo
-        }
-        if (Objects.nonNull(socio.getNombre()) && !"".equalsIgnoreCase(socio.getNombre())) {        //Comprueba que no se está introduciendo un nombre nulo
-            socioExistente.setNombre(socio.getNombre());                                            //Sustituye el nombre del socio existente por el nuevo
-        }
-        if (Objects.nonNull(socio.getApellido1()) && !"".equalsIgnoreCase(socio.getApellido1())) {  //Comprueba que no se está introduciendo un apellido1 nulo
-            socioExistente.setApellido1(socio.getApellido1());                                      //Sustituye el apellido1 del socio existente por el nuevo
-        }
-        if (Objects.nonNull(socio.getApellido2()) && !"".equalsIgnoreCase(socio.getApellido2())) {  //Comprueba que no se está introduciendo un apellido2 nulo
-            socioExistente.setApellido2(socio.getApellido2());                                      //Sustituye el apellido2 del socio existente por el nuevo
-        }
-        if (Objects.nonNull(socio.getDireccion()) && !"".equalsIgnoreCase(socio.getDireccion())) {  //Comprueba que no se está introduciendo una dirección nula
-            socioExistente.setDireccion(socio.getDireccion());                                      //Sustituye la dirección del socio existente por la nueva
-        }
-        if (Objects.nonNull(socio.getTelefono())) {    //Comprueba que no se está introduciendo un teléfono nulo
-            socioExistente.setTelefono(socio.getTelefono());                                                        //Sustituye el teléfono del socio existente por el nuevo
-        }
-        if (Objects.nonNull(socio.getEmail()) && !"".equalsIgnoreCase(socio.getEmail())) {  //Comprueba que no se está introduciendo un email nulo
-            socioExistente.setEmail(socio.getEmail());                                      //Sustityue el email del socio existente por el nuevo
-        }
-        return socioRepository.save(socioExistente);
-        //Guarda el socio existente con los cambios realizados (UPDATE)
-    }
-     */
 
     @Override
     public void deleteSocio(int id) throws NotFoundException {
+        //EL SOCIO NO EXISTE
         Optional<Socio> socio = socioRepository.findSocioById(id);
         if (!socio.isPresent()) {
             throw new NotFoundException("El socio no está registrado");
@@ -235,39 +209,60 @@ public class SocioServiceIMP implements SocioService {
     //CONSULTAS ESPECÍFICAS
 
     @Override
-    public Socio findSocioById(int id) throws NotFoundException {
+    public SocioDTO findSocioById(int id) throws NotFoundException {
         Optional<Socio> socio = socioRepository.findSocioById(id);
         if (!socio.isPresent()) {     //Si el socio no está presente...
             throw new NotFoundException("El socio no está registrado");
             //Instancia la excepción con su mensaje de respuesta
         }
-        return socio.get();
-        //Si el socio existe, devuelve, el objeto Socio contenido en <Optional> mediante "get"
+        Socio socioBuscado = socio.get();
+        SocioDTO socioDTO = new SocioDTO();
+        socioDTO.setId(socioBuscado.getId());
+        socioDTO.setDni(socioBuscado.getDni());
+        socioDTO.setNombre(socioBuscado.getNombre());
+        socioDTO.setApellido1(socioBuscado.getApellido1());
+        socioDTO.setApellido2(socioBuscado.getApellido2());
+
+        return socioDTO;
     }
 
     @Override
-    public Socio findSocioByDniWithJPQL(String dni) throws NotFoundException {
+    public SocioDTO findSocioByDniWithJPQL(String dni) throws NotFoundException {
         Optional<Socio> socio = socioRepository.findSocioByDniWithJPQL(dni);
         if (!socio.isPresent()) {     //Si el socio no está presente...
             throw new NotFoundException("El socio no está registrado");
             //Instancia la excepción con su mensaje de respuesta
         }
-        return socio.get();
-        //Si el socio existe, devuelve, el objeto Socio contenido en <Optional> mediante "get"
+
+        Socio socioBuscado = socio.get();
+        SocioDTO socioDTO = new SocioDTO();
+        socioDTO.setId(socioBuscado.getId());
+        socioDTO.setDni(socioBuscado.getDni());
+        socioDTO.setNombre(socioBuscado.getNombre());
+        socioDTO.setApellido1(socioBuscado.getApellido1());
+        socioDTO.setApellido2(socioBuscado.getApellido2());
+
+        return socioDTO;
     }
 
     @Override
-    public Socio findSocioByDniIgnoreCase(String dni) throws NotFoundException {
+    public SocioDTO findSocioByDniIgnoreCase(String dni) throws NotFoundException {
         Optional<Socio> socio = socioRepository.findSocioByDniIgnoreCase(dni);
         if (!socio.isPresent()) {     //Si el socio no está presente...
             throw new NotFoundException("El socio no está registrado");
             //Instancia la excepción con su mensaje de respuesta
         }
-        return socio.get();
-        //Si el socio existe, devuelve, el objeto Socio contenido en <Optional> mediante "get"
+
+        Socio socioBuscado = socio.get();
+        SocioDTO socioDTO = new SocioDTO();
+        socioDTO.setId(socioBuscado.getId());
+        socioDTO.setDni(socioBuscado.getDni());
+        socioDTO.setNombre(socioBuscado.getNombre());
+        socioDTO.setApellido1(socioBuscado.getApellido1());
+        socioDTO.setApellido2(socioBuscado.getApellido2());
+
+        return socioDTO;
     }
-
-
 
 
 }
