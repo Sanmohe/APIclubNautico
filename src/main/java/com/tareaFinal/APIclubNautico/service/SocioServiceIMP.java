@@ -200,6 +200,20 @@ public class SocioServiceIMP implements SocioService {
         if (!socio.isPresent()) {
             throw new NotFoundException("El socio no está registrado");
         }
+
+        Socio socioBorrado = socio.get();
+        if (socioBorrado.getPatron() !=null) {
+            //Si el socio tiene un patrón vinculado
+            Patron patron = socioBorrado.getPatron();
+            //Se realiza copia del patrón
+            patron.setSocio(null);
+            //Se desvincula el patrón del socio
+            socioBorrado.setPatron(null);
+            //Se desvincula el patrón del socio
+            patronRepository.save(patron);
+            //Se guarda el patron actualizado
+        }
+
         socioRepository.deleteById(id);
         //Llama al método del Repositorio para borrar el socio por el "id" introducido (DELETE)
     }

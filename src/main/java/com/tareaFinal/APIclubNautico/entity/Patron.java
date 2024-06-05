@@ -13,8 +13,7 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor      //Genera automáticamente un constructor sin argumentos
 @Builder                //Aplica el patrón de diseño "builder"
 @Entity                 //Indica que la clase es una entidad JPA que se mapea a la BD
-@Table(name = "patron")
-//Indica la tabla a la que se mapea ("name" debe coincidir con el nombre exacto de la tabla en la BD)
+@Table(name = "patron") //Indica la tabla a la que se mapea ("name" debe coincidir con el nombre exacto de la tabla en la BD)
 public class Patron {
     @Id                                                     //Indica la PK de la entidad
     @GeneratedValue(strategy = GenerationType.IDENTITY)     //Indica que se genera automáticamente

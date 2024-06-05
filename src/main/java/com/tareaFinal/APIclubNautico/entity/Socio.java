@@ -23,7 +23,7 @@ public class Socio {
 
     @NotBlank(message = "Campo obligatorio")    //Indica que el campo no pueda dejarse en blanco o nulo
     @Length(min=9, max=9, message = "Introduzca un DNI válido")     //Valida el valor del DNI
-    @Column (unique = true, nullable = false)   //Especifica que el DNI debe ser único en la BD
+    @Column(unique = true, nullable = false)   //Especifica que el DNI debe ser único en la BD
     private String dni;
 
     @NotBlank(message = "Campo obligatorio")    //Indica que el campo no pueda dejarse en blanco o nulo
@@ -46,10 +46,11 @@ public class Socio {
     @Column
     private String email;
 
-    @OneToOne(mappedBy = "socio", cascade = {CascadeType.MERGE})
+    @OneToOne(mappedBy = "socio", cascade = {CascadeType.PERSIST})
     //Indica que la es relación 1:1
     // "mappedBy" indica que la relaciñon está mapeada por "socio" en la entidad relacionada
-    // "CascadeType.MERGE" indica que solo las actualizaciones de socio se reflejarán en Patrón
+    // "CascadeType.PERSIST" indica que el guardado de un socio también se refleja en Patrón
+    // "CascadeType.MERGE" indica que las actualizaciones de socio se refleja en Patrón
     // Se podría borrar un socio sin borrar el patrón
     private Patron patron;
 }
