@@ -24,13 +24,10 @@ CREATE TABLE patron (
 );
 
 CREATE TABLE barco (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    matricula VARCHAR(50),
+	matricula VARCHAR(50) PRIMARY KEY,
     nombre VARCHAR(50),
     num_amarre INT,
-    cuota DECIMAL(6,2),
-    idSocio INT NOT NULL,
-    FOREIGN KEY (idSocio) REFERENCES socio(id) ON DELETE CASCADE
+    cuota DECIMAL(6,2)
 );
 
 CREATE TABLE salida (

@@ -5,7 +5,6 @@ import com.tareaFinal.APIclubNautico.entity.Socio;
 import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
 import com.tareaFinal.APIclubNautico.error.NotFoundException;
 import com.tareaFinal.APIclubNautico.error.dto.PatronDTO;
-import com.tareaFinal.APIclubNautico.error.dto.SocioDTO;
 import com.tareaFinal.APIclubNautico.repository.PatronRepository;
 import com.tareaFinal.APIclubNautico.repository.SocioRepository;
 import jakarta.transaction.Transactional;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -158,11 +156,11 @@ public class PatronServiceIMP implements PatronService {
             //Se guarda el socio con los campos actualizados del patron vinculado.
         }
 
-        Patron patronActualizado = patronRepository.save(patronCopia);
-        //Guarda el patron actualizado y copia sus datos a patronActualizado (UPDATE)
+        patronRepository.save(patronCopia);
+        //Guarda el patron actualizado (UPDATE)
 
         PatronDTO patronDTO = new PatronDTO();
-        patronDTO.convierteDTO(patronActualizado);
+        patronDTO.convierteDTO(patronCopia);
         //Este método pasa todos los valores de patronActualizado a patronDTO
 
         return patronDTO;

@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Data                   //Genera automáticamente getters and setters
 @AllArgsConstructor     //Genera automáticamente un constructor con un argumento por atributo/campo
 @NoArgsConstructor      //Genera automáticamente un constructor sin argumentos
@@ -54,4 +56,12 @@ public class Socio {
     // "CascadeType.MERGE" indica que las actualizaciones de socio se refleja en Patrón
     // Se podría borrar un socio sin borrar el patrón
     private Patron patron;
+
+    @OneToMany(mappedBy = "socio", cascade = {CascadeType.ALL})
+    //Indica que la es relación 1:N (Un socio puede tener varios barcos)
+    // "mappedBy" indica que la relación está mapeada por "socio" en la entidad relacionada
+    // "CascadeType.ALL" indica que todas las operaciones de persistencia se reflejan en Barco
+    // Si se borra un socio, se borran también sus barcos asociados
+    private List<Barco> barcos;
+
 }

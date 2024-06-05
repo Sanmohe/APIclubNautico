@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -94,7 +93,7 @@ public class SocioServiceIMP implements SocioService {
     @Transactional
     @Override
     public SocioDTO updateSocio(int id, Socio socio) throws NotFoundException, AlreadyExistsException {
-        //EL SOCIO YA EXISTE
+        //EL SOCIO NO EXISTE
         Optional<Socio> socioExistente = socioRepository.findSocioById(id);
         //Se busca un socio existente por la ID introducida
         if (!socioExistente.isPresent()) {
@@ -158,8 +157,8 @@ public class SocioServiceIMP implements SocioService {
             //Se guarda el patrón con los campos actualizados del socio vinculado.
         }
 
-        Socio socioActualizado = socioRepository.save(socioCopia);
-        //Guarda el socio actualizado y copia sus datos a socioActualizado (UPDATE)
+        socioRepository.save(socioCopia);
+        //Guarda el socio actualizado (UPDATE)
 
         SocioDTO socioDTO = new SocioDTO();
         socioDTO.convierteDTO(socioCopia);
