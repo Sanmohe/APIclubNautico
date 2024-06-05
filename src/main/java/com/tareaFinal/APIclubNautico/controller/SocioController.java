@@ -57,12 +57,11 @@ public class SocioController {
         //Y que puede arrojar la excepción de "no encontrado"
         return socioService.findSocioByDniIgnoreCase(dni);
         //Llama al método del Servicio para devolver la lista de socios filtrada por nombre
-
     }
 
     @PostMapping("/createSocio")
         //Mapea las solicitudes POST a la url indicada
-    Socio saveSocio(@Valid @RequestBody Socio socio) throws AlreadyExistsException {
+    SocioDTO saveSocio(@Valid @RequestBody Socio socio) throws AlreadyExistsException {
         //Indica que va a recibir el cuerpo de la peticion HTTP y mapeará al objeto Socio
         //Y que puede arrojar la excepción de "ya existe"
         //@Valid exige que se validen los datos

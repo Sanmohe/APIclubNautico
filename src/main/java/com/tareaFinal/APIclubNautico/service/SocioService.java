@@ -24,7 +24,7 @@ public interface SocioService {
     //Método que devolverá el socio filtrado por "dni"(Spring JPA)
     //Puede arrojar la excepción "no encontrado"
 
-    Socio saveSocio(Socio socio) throws AlreadyExistsException;
+    SocioDTO saveSocio(Socio socio) throws AlreadyExistsException;
     //Método que guardará el registro de un nuevo Socio (CREATE)
     //Puede arrojar la excepción "ya existe"
 

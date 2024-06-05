@@ -46,13 +46,13 @@ public class SocioServiceIMP implements SocioService {
             socioDTO.setNombre(socio.getNombre());
             socioDTO.setApellido1(socio.getApellido1());
             socioDTO.setApellido2(socio.getApellido2());
+            //Se insertan los valores de la entidad en socioDTO
 
             // Se obtiene el ID del patrón y se incluye en el DTO
             if (socio.getPatron() != null) {
                 //Solo si el socio tiene asignado un patrón
                 socioDTO.setIdPatron(socio.getPatron().getId());
             }
-
             socioDTOs.add(socioDTO);
         }
         return socioDTOs;
@@ -60,7 +60,7 @@ public class SocioServiceIMP implements SocioService {
 
 
     @Override
-    public Socio saveSocio(Socio socio) throws AlreadyExistsException {
+    public SocioDTO saveSocio(Socio socio) throws AlreadyExistsException {
         Optional<Socio> socioExistente = socioRepository.findSocioByDniIgnoreCase(socio.getDni());
         //Optional se usa para evitar el manejo directo de valores null. Encapsula valores.
         //En lugar de devolver un "null" devuelve un "optional" que indica la posibilidad de ausencia de un valor
@@ -86,26 +86,24 @@ public class SocioServiceIMP implements SocioService {
             patronCopia.setSocio(socio);
             //En el patrón se incluye el socio creado como referencia
         }
-        return socioRepository.save(socio);
-        //Guarda el socio (CREATE)
-    }
 
+        Socio socioNuevo = socioRepository.save(socio);
+        //Guarda el socio y copia sus datos a socioNuevo
 
-   /*
-    @Override
+        SocioDTO socioDTO = new SocioDTO();
+        socioDTO.setId(socioNuevo.getId());
+        socioDTO.setDni(socioNuevo.getDni());
+        socioDTO.setNombre(socioNuevo.getNombre());
+        socioDTO.setApellido1(socioNuevo.getApellido1());
+        socioDTO.setApellido2(socioNuevo.getApellido2());
 
-    public Socio saveSocio(Socio socio) throws AlreadyExistsException {
-        Optional<Socio> socioExistente = socioRepository.findSocioByDniIgnoreCase(socio.getDni());
-        //Optional se usa para evitar el manejo directo de valores null. Encapsula valores.
-        //En lugar de devolver un "null" devuelve un "optional" que indica la posibilidad de ausencia de un valor
-        //Si el valor optional existe, hay que usar GET para acceder.
-        if (socioExistente.isPresent()) {
-            throw new AlreadyExistsException("El socio que intenta crear ya existe");
+        if (socio.getPatron() != null) {
+            //Solo si el socio tiene asignado un patrón
+            socioDTO.setIdPatron(socioNuevo.getPatron().getId());
         }
-        return socioRepository.save(socio);
+        return socioDTO;
         //Guarda el socio (CREATE)
     }
-    */
 
 
     @Transactional
@@ -240,4 +238,8 @@ public class SocioServiceIMP implements SocioService {
         return socio.get();
         //Si el socio existe, devuelve, el objeto Socio contenido en <Optional> mediante "get"
     }
+
+
+
+
 }
