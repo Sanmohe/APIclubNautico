@@ -34,13 +34,9 @@ CREATE TABLE salida (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     fecha DATE,
     hora TIME,
-    destino VARCHAR(50),
-    idBarco INT NOT NULL,
-    idPatron INT NOT NULL,
-    FOREIGN KEY (idBarco) REFERENCES barco(id) ON DELETE CASCADE,
-    FOREIGN KEY (idPatron) REFERENCES patron(id)
+    destino VARCHAR(50)
 );
 
-DROP TABLE socio;
+DROP TABLE barco;
 
 DROP DATABASE clubNautico;

@@ -4,7 +4,7 @@ import com.tareaFinal.APIclubNautico.entity.Barco;
 import com.tareaFinal.APIclubNautico.entity.Socio;
 import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
 import com.tareaFinal.APIclubNautico.error.NotFoundException;
-import com.tareaFinal.APIclubNautico.error.dto.BarcoDTO;
+import com.tareaFinal.APIclubNautico.DTO.BarcoDTO;
 import com.tareaFinal.APIclubNautico.repository.BarcoRepository;
 import com.tareaFinal.APIclubNautico.repository.SocioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,7 +167,7 @@ public class BarcoServiceIMP implements BarcoService {
     }
 
     @Override
-    public BarcoDTO findbarcoByNombreIgnoreCase(String nombre) throws NotFoundException {
+    public BarcoDTO findBarcoByNombreIgnoreCase(String nombre) throws NotFoundException {
         Optional<Barco> barco = barcoRepository.findSocioByNombreIgnoreCase(nombre);
         if (!barco.isPresent()) {
             throw new NotFoundException("El barco no está registrado");

@@ -3,7 +3,7 @@ package com.tareaFinal.APIclubNautico.service;
 import com.tareaFinal.APIclubNautico.entity.Barco;
 import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
 import com.tareaFinal.APIclubNautico.error.NotFoundException;
-import com.tareaFinal.APIclubNautico.error.dto.BarcoDTO;
+import com.tareaFinal.APIclubNautico.DTO.BarcoDTO;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ public interface BarcoService {
     //Método que devolverá una lista de elementos Barco (READ)
 
     BarcoDTO findBarcoByMatriculaIgnoreCase(String matricula) throws NotFoundException;
-    //Método que devolverá los barcos filtrados por "id"
+    //Método que devolverá los barcos filtrados por "matricula"
     //Puede arrojar la excepción "no encontrado"
 
-    BarcoDTO findbarcoByNombreIgnoreCase(String nombre) throws NotFoundException;
+    BarcoDTO findBarcoByNombreIgnoreCase(String nombre) throws NotFoundException;
     //Método que devolverá el barco filtrado por "nombre"(Spring JPA)
     //Puede arrojar la excepción "no encontrado"
 
@@ -28,7 +28,6 @@ public interface BarcoService {
     BarcoDTO updateBarco (String matricula, Barco barco) throws NotFoundException;
     //Método que actualizará el registro de un Barco existente (UPDATE)
     //Puede arrojar la excepción "no encontrado"
-    //Puede arrojar la excepción "ya existe"
 
     BarcoDTO cambiaPropietarioBarco (String matricula, int idSocio) throws NotFoundException;
     //Método que actualizará el propietario asociado a un Barco existente (UPDATE)

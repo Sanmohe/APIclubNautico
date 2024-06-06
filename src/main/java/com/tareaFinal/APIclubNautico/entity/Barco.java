@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data                   //Genera automáticamente getters and setters
 @AllArgsConstructor     //Genera automáticamente un constructor con un argumento por atributo/campo
 @NoArgsConstructor      //Genera automáticamente un constructor sin argumentos
@@ -31,6 +33,13 @@ public class Barco {
     @JoinColumn(name = "idSocio", nullable = false)
     //Indica que la es relación 1:N (un barco solo puede y debe pertenecer a un Socio)
     private Socio socio;
+
+    @OneToMany(mappedBy = "barco", cascade = {CascadeType.ALL})
+    //Indica que la es relación 1:N (Un barco puede tener varias salidas)
+    // "mappedBy" indica que la relación está mapeada por "barco" en la entidad relacionada
+    // "CascadeType.ALL" indica que todas las operaciones de persistencia se reflejan en Salida
+    // Si se borra un barco, se borran también sus salidas asociadas
+    private List<Salida> salidas;
 
 }
 

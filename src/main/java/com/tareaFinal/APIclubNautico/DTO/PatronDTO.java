@@ -1,7 +1,6 @@
-package com.tareaFinal.APIclubNautico.error.dto;
+package com.tareaFinal.APIclubNautico.DTO;
 
 import com.tareaFinal.APIclubNautico.entity.Patron;
-import com.tareaFinal.APIclubNautico.entity.Socio;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +24,7 @@ public class PatronDTO {
     a la hora de comprobar el funcionamiento de las operaciones CRUD
      */
 
+    //Método que convierte la entidad al DTO
     public void convierteDTO (Patron patron) {
         id = patron.getId();
         dni = patron.getDni();

@@ -1,4 +1,4 @@
-package com.tareaFinal.APIclubNautico.error.dto;
+package com.tareaFinal.APIclubNautico.DTO;
 
 import com.tareaFinal.APIclubNautico.entity.Barco;
 import lombok.AllArgsConstructor;
@@ -21,6 +21,7 @@ public class BarcoDTO {
     a la hora de comprobar el funcionamiento de las operaciones CRUD.
      */
 
+    //Método que convierte la entidad al DTO
     public void convierteDTO(Barco barco) {
         matricula = barco.getMatricula();
         nombre = barco.getNombre();

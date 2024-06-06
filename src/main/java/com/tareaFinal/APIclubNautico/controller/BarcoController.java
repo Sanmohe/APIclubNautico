@@ -4,10 +4,8 @@ package com.tareaFinal.APIclubNautico.controller;
 import com.tareaFinal.APIclubNautico.entity.Barco;
 import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
 import com.tareaFinal.APIclubNautico.error.NotFoundException;
-import com.tareaFinal.APIclubNautico.error.dto.BarcoDTO;
-import com.tareaFinal.APIclubNautico.error.dto.PatronDTO;
+import com.tareaFinal.APIclubNautico.DTO.BarcoDTO;
 import com.tareaFinal.APIclubNautico.service.BarcoService;
-import com.tareaFinal.APIclubNautico.service.PatronService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -49,8 +47,8 @@ public class BarcoController {
     BarcoDTO findBarcoByDniIgnoreCase(@PathVariable String nombre) throws NotFoundException {
         //Indica que va a capturar el parámetro "dni" de la URL
         //Y que puede arrojar la excepción de "no encontrado"
-        return barcoService.findbarcoByNombreIgnoreCase(nombre);
-        //Llama al método del Servicio para devolver la lista de barcos filtrada por nombre
+        return barcoService.findBarcoByNombreIgnoreCase(nombre);
+        //Llama al método del Servicio para devolver el barco filtrado por nombre
     }
 
     @PostMapping("/createBarco/{idSocio}")

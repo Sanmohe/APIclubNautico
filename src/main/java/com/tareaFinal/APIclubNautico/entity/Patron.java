@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Data                   //Genera automáticamente getters and setters
 @AllArgsConstructor     //Genera automáticamente un constructor con un argumento por atributo/campo
 @NoArgsConstructor      //Genera automáticamente un constructor sin argumentos
@@ -53,5 +55,13 @@ public class Patron {
     //Indica el campo de la BD que actúa como clave foránea (idSocio)
     //y la referencia al campo correspondiente de la otra entidad (id)
     private Socio socio;
+
+    @OneToMany(mappedBy = "patron", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    //Indica que la es relación 1:N (Un patrón puede tener varias salidas)
+    // "mappedBy" indica que la relación está mapeada por "patron" en la entidad relacionada
+    // "CascadeType.PERSIST" indica que el guardado de un Patron también se refleja en Salida
+    // "CascadeType.MERGE" indica que las actualizaciones de Paron se refleja en Salida
+    // Se podría borrar un Patron sin borrar las Salidas  asociadas
+    private List<Salida> salidas;
 
 }

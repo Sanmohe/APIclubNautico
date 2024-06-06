@@ -3,7 +3,7 @@ package com.tareaFinal.APIclubNautico.controller;
 import com.tareaFinal.APIclubNautico.entity.Patron;
 import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
 import com.tareaFinal.APIclubNautico.error.NotFoundException;
-import com.tareaFinal.APIclubNautico.error.dto.PatronDTO;
+import com.tareaFinal.APIclubNautico.DTO.PatronDTO;
 import com.tareaFinal.APIclubNautico.service.PatronService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

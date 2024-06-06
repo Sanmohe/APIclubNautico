@@ -3,7 +3,7 @@ package com.tareaFinal.APIclubNautico.service;
 import com.tareaFinal.APIclubNautico.entity.Patron;
 import com.tareaFinal.APIclubNautico.error.AlreadyExistsException;
 import com.tareaFinal.APIclubNautico.error.NotFoundException;
-import com.tareaFinal.APIclubNautico.error.dto.PatronDTO;
+import com.tareaFinal.APIclubNautico.DTO.PatronDTO;
 
 import java.util.List;
 

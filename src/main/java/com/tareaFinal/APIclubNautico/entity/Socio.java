@@ -49,7 +49,7 @@ public class Socio {
     @Column
     private String email;
 
-    @OneToOne(mappedBy = "socio", cascade = {CascadeType.PERSIST})
+    @OneToOne(mappedBy = "socio", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     //Indica que la es relación 1:1
     // "mappedBy" indica que la relaciñon está mapeada por "socio" en la entidad relacionada
     // "CascadeType.PERSIST" indica que el guardado de un socio también se refleja en Patrón
