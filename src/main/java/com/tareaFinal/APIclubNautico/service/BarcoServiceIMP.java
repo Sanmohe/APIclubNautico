@@ -35,7 +35,7 @@ public class BarcoServiceIMP implements BarcoService {
     public List<BarcoDTO> findAllBarcos() {
         List<Barco> barcos = barcoRepository.findAll();
         List<BarcoDTO> barcoDTOs = new ArrayList<>();
-
+        //Conversión de salidas a DTO
         for (Barco barco:barcos) {
             BarcoDTO barcoDTO = new BarcoDTO();
             barcoDTO.convierteDTO(barco);

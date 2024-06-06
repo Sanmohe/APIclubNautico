@@ -1,0 +1,764 @@
+{
+	"info": {
+		"_postman_id": "2821a9d3-cfec-4836-8cbf-cbf8b556e2df",
+		"name": "ClubNautico",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35160017"
+	},
+	"item": [
+		{
+			"name": "Socio",
+			"item": [
+				{
+					"name": "findAllSocios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findAllSocios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findAllSocios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findSocioById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findSocioById/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findSocioById",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findSocioByDni",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findSocioByDni/30454710K",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findSocioByDni",
+								"30454710K"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findSocioByDniWithJPQL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findSocioByDniWithJPQL/30330857H",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findSocioByDniWithJPQL",
+								"30330857H"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveSocio",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"dni\": \"30987655R\",\r\n        \"nombre\": \"Javier\",\r\n        \"apellido1\": \"Rodríguez\",\r\n        \"apellido2\": \"González\",\r\n        \"direccion\": \"C/Marea nº 1. 11500. El Puerto de Sta María\",\r\n        \"telefono\": 687772054,\r\n        \"email\": \"javrodgon@gmail.com\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/createSocio",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"createSocio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateSocio",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dni\": \"30454710B\",\r\n    \"nombre\": \"Sergio\",\r\n    \"apellido1\": \"Cárdenas\",\r\n    \"apellido2\": \"Muñoz\",\r\n    \"direccion\": \"C/Manolete nº 8. 11500. El Puerto de Sta María\",\r\n    \"telefono\": 69084753,\r\n    \"email\": \"sercarmun@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/updateSocio/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"updateSocio",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteSocio",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/deleteSocio/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"deleteSocio",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Patron",
+			"item": [
+				{
+					"name": "findAllPatrones",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findAllPatrones",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findAllPatrones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findPatronById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findPatronById/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findPatronById",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findPatronByDni",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findPatronByDni/30330857H",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findPatronByDni",
+								"30330857H"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "savePatron",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"dni\": \"30330857H\",\r\n        \"nombre\": \"Sonia\",\r\n        \"apellido1\": \"López\",\r\n        \"apellido2\": \"Camacho\",\r\n        \"direccion\": \"C/Pino nº 3. 11500. El Puerto de Sta María\",\r\n        \"telefono\": 630557336,\r\n        \"email\": \"sonlopcam@gmail.com\"\r\n    }\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/createPatron",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"createPatron"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatePatron",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dni\": \"30454710B\",\r\n    \"nombre\": \"Sergio\",\r\n    \"apellido1\": \"Cárdenas\",\r\n    \"apellido2\": \"Muñoz\",\r\n    \"direccion\": \"C/Manolete nº 5. 11500. El Puerto de Sta María\",\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/updatePatron/2?=32090128S&nombre=Manuel&apellido1=Gálvez&apellido2=Pereiro&direccion=C/Alpargata nº 22. 14010. Córdoba&telefono=690546566&email=mangalper@gmail.com",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"updatePatron",
+								"2"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "32090128S"
+								},
+								{
+									"key": "nombre",
+									"value": "Manuel"
+								},
+								{
+									"key": "apellido1",
+									"value": "Gálvez"
+								},
+								{
+									"key": "apellido2",
+									"value": "Pereiro"
+								},
+								{
+									"key": "direccion",
+									"value": "C/Alpargata nº 22. 14010. Córdoba"
+								},
+								{
+									"key": "telefono",
+									"value": "690546566"
+								},
+								{
+									"key": "email",
+									"value": "mangalper@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletePatron",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/deletePatron/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"deletePatron",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Barco",
+			"item": [
+				{
+					"name": "findAllBarcos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findAllPatrones",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findAllPatrones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findBarcoByMatricula",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findBarcoByMatricula/0001ABCD",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findBarcoByMatricula",
+								"0001ABCD"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findBarcoByNombre",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findBarcoByNombre/concordia",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findBarcoByNombre",
+								"concordia"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveBarco",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"matricula\": \"0001ABCD\",\r\n        \"nombre\": \"Concordia\",\r\n        \"numAmarre\": 2,\r\n        \"cuota\": 65.20\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/createBarco/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"createBarco",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateBarco",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dni\": \"30454710B\",\r\n    \"nombre\": \"Sergio\",\r\n    \"apellido1\": \"Cárdenas\",\r\n    \"apellido2\": \"Muñoz\",\r\n    \"direccion\": \"C/Manolete nº 5. 11500. El Puerto de Sta María\",\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/updateBarco/0000ABC",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"updateBarco",
+								"0000ABC"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cambiaPropietarioBarco",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cambiaPropietario/0001ABCD/socio/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cambiaPropietario",
+								"0001ABCD",
+								"socio",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteBarco",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/deleteBarco/0000ABC",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"deleteBarco",
+								"0000ABC"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Salida",
+			"item": [
+				{
+					"name": "findAllSalidas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findAllSalidas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findAllSalidas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findSalidaById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findSalidaById/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findSalidaById",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findSalidaByFecha",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findSalidasByFecha/17-03-2024",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findSalidasByFecha",
+								"17-03-2024"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findSalidaByBarco",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findSalidasByFecha/17-03-2024",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findSalidasByFecha",
+								"17-03-2024"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findSalidaByPatron",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/findSalidasByFecha/17-03-2024",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"findSalidasByFecha",
+								"17-03-2024"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveSalida",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fecha\": \"2024-04-17\",\r\n    \"hora\": \"09:00\",\r\n    \"destino\": \"Mallorca\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/createSalida/0001ABCD/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"createSalida",
+								"0001ABCD",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateSalida",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fecha\": \"25-11-2024\",\r\n    \"hora\": \"12:00\",\r\n    \"destino\": \"Lanzarote\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/updateSalida/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"updateSalida",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cambiaBarco",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fecha\": \"25-11-2024\",\r\n    \"hora\": \"12:00\",\r\n    \"destino\": \"Lanzarote\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cambiaBarco/1/1000ZZZZ",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cambiaBarco",
+								"1",
+								"1000ZZZZ"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cambiaPatron",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fecha\": \"25-11-2024\",\r\n    \"hora\": \"12:00\",\r\n    \"destino\": \"Lanzarote\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cambiaPatron/1/patron/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cambiaPatron",
+								"1",
+								"patron",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteSalida",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/deleteBarco/0000ABC",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"deleteBarco",
+								"0000ABC"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -8,6 +8,7 @@ import com.tareaFinal.APIclubNautico.error.NotFoundException;
 import com.tareaFinal.APIclubNautico.repository.BarcoRepository;
 import com.tareaFinal.APIclubNautico.repository.PatronRepository;
 import com.tareaFinal.APIclubNautico.repository.SalidaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -110,6 +111,7 @@ public class SalidaServiceIMP implements SalidaService{
     }
 
     @Override
+    @Transactional
     public SalidaDTO saveSalida(String matricula, int idPatron, Salida salida) throws NotFoundException {
         //EL BARCO NO EXISTE
         Optional<Barco> barcoExistente = barcoRepository.findBarcoByMatriculaIgnoreCase(matricula);

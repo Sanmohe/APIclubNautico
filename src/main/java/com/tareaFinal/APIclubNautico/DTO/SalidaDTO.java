@@ -1,10 +1,14 @@
 package com.tareaFinal.APIclubNautico.DTO;
 
 import com.tareaFinal.APIclubNautico.entity.Salida;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SalidaDTO {
     private int id;
     private String fecha;

@@ -16,5 +16,4 @@ public interface SalidaRepository extends JpaRepository<Salida, Integer> {
     List<Salida> findSalidasByFecha(String fecha);
     List<Salida> findSalidasByBarcoMatricula(String matricula);
     List<Salida> findSalidasByPatronId(int id);
-
 }

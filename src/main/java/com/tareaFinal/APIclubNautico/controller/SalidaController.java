@@ -10,6 +10,7 @@ import com.tareaFinal.APIclubNautico.service.BarcoService;
 import com.tareaFinal.APIclubNautico.service.SalidaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,9 +52,9 @@ public class SalidaController {
         return salidaService.findSalidasByPatron(idPatron);
     }
 
-    @PostMapping("/createSalida/{matricula}/patron/{idPatron}")
-    SalidaDTO saveSalida(@PathVariable String matricula, @PathVariable int idSocio, @Valid @RequestBody Salida salida) throws NotFoundException, AlreadyExistsException {
-         return salidaService.saveSalida(matricula, idSocio, salida);
+    @PostMapping("/createSalida/{matricula}/{idPatron}")
+    SalidaDTO saveSalida(@PathVariable String matricula, @PathVariable int idPatron, @Valid @RequestBody Salida salida) throws NotFoundException, AlreadyExistsException {
+         return salidaService.saveSalida(matricula, idPatron, salida);
     }
 
     @PutMapping("/updateSalida/{id}")
@@ -77,8 +78,5 @@ public class SalidaController {
         salidaService.deleteSalida(id);
         return "Salida eliminada correctamente";
     }
-    
-    
-    
-    
+
 }
